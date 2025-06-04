@@ -43,3 +43,13 @@ button{
     color: #ffffff;
     margin-bottom: 20px;
 }
+
+.otp-form{
+    display: block;
+    margin: 20px 0;
+}
+
+.otp-form  {
+    margin: 20px;
+    color: green;
+}
