@@ -5,6 +5,13 @@
     <title>Halaman Depan</title>
 </head>
 <body>
-    <<h1>TES TES TES TESS </h1>
+    <h1>HOME PAGE</h1>
+    {% if username %}
+       <h3>Welcome, {{ username }}!</h3>
+       <a href="/logout">Logout</a>
+    {% else %}
+       <h3>You are not logged in. Please <a href="/login">Login</a> to access the home page.</h3>
+    {% endif %}
+    <h3>TES TES TES TESS </h3>
 </body>
 </html>
