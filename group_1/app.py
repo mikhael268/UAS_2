@@ -1,100 +1,65 @@
-from flask import Flask, flash, redirect, render_template, request, url_for, session
-from config import Config
-import os, pdfkit
+from flask import Flask, render_template, request, redirect, url_for, session
+from flask_mysqldb import MySQL
+import os
+from flask import Flask
 
-class Portal:
-    def __init__(self):
-        self.app = Flask(__name__)
-        self.app.secret_key = '!@#$123456&*()'
-        self.con = Config()
-        self.routes()
-       
-    def routes(self):
-        @self.app.route('/testdb')
-        def test_db():
-            try:
-                if self.con.mysql is not None:
-                    return 'Database connection successful!'
-            except Exception as e:
-                return f"Database connection failed: {e}"
-           
-        # mobil
-        @self.app.route('/data-mobil')
-        def readMobil():
-            cur = self.con.mysql.cursor()
-            cur.execute('SELECT * FROM mobil')
-            data = cur.fetchall()
-            cur.close()
-            return render_template('readMobil.html', data=data)
-       
-        @self.app.route('/insert-mobil/')
-        def createMobil():
-            return render_template('insertMobil.html')
+app = Flask(__name__, template_folder='templates', static_folder='static')
 
-        @self.app.route('/insert-mobil/process', methods=['POST'])
-        def createMobilProcess():
-            if request.method == 'POST':
-                id_mobil = request.form['id_mobil']
-                nama = request.form['nama']
-                kategori = request.form['kategori']
-                spesifikasi = request.form['spesifikasi']
-                harga = request.form['harga']
-                tahun = request.form['tahun']
-                cur = self.con.mysql.cursor()
-                try:
-                    cur.execute('INSERT INTO mobil (id_mobil, nama, kategori, spesifikasi, harga, tahun) VALUES (%s, %s, %s, %s, %s, %s)',
-                                (id_mobil, nama, kategori, spesifikasi, harga, tahun))
-                    self.con.mysql.commit()
-                    flash('Mobil created successfully!', 'success')
-                except Exception as e:
-                    flash('Mobil creation failed: ' + str(e), 'error')
-                cur.close()
-                return redirect(url_for('readMobil'))
-               
-        @self.app.route('/update-mobil/<string:id_mobil>')
-        def updateMobil(id_mobil):
-            cur = self.con.mysql.cursor()
-            cur.execute('SELECT * FROM mobil WHERE id_mobil = %s', (id_mobil,))
-            data = cur.fetchone()
-            cur.close()
-            return render_template('updateMobil.html', data=data)
-       
-        @self.app.route('/update-mobil/process', methods=['POST'])
-        def updateMobilProcess():
-            if request.method == 'POST':
-                id_mobil = request.form['id_mobil']
-                nama = request.form['nama']
-                kategori = request.form['kategori']
-                spesifikasi = request.form['spesifikasi']
-                harga = request.form['harga']
-                tahun = request.form['tahun']
-                cur = self.con.mysql.cursor()
-                try:
-                    cur.execute('UPDATE mobil SET nama = %s, kategori = %s, spesifikasi = %s, harga = %s, tahun = %s WHERE id_mobil = %s',
-                                (nama, kategori, spesifikasi, harga, tahun, id_mobil))
-                    self.con.mysql.commit()
-                    flash('Mobil updated successfully!', 'success')
-                except Exception as e:
-                    flash('Mobil update failed: ' + str(e), 'error')
-                cur.close()
-                return redirect(url_for('readMobil'))
-           
-        @self.app.route('/delete-mobil/<string:id_mobil>')
-        def deleteMobil(id_mobil):
-            cur = self.con.mysql.cursor()
-            try:
-                cur.execute('DELETE FROM mobil WHERE id_mobil = %s', (id_mobil,))
-                self.con.mysql.commit()
-                flash('Mobil deleted successfully!', category='success')
-            except Exception as e:
-                flash('Mobil delete failed: ' + str(e), category='error')
-            cur.close()
-            return redirect(url_for('readMobil'))
-        # end mobil
-                       
-    def run(self):
-        self.app.run(debug=True)
-           
+
+app.secret_key = '123'
+
+#mysql config 
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'bioskop_user'
+
+mysql = MySQL(app)
+
+@app.route('/')
+def home():
+    if 'username' in session:
+        return render_template('halaman_depan.html', username=session['username'])
+    else:
+        return render_template('halaman_depan.html')
+    
+@app.route('/login', methods=['GET', 'POST'] )
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        pwd = request.form['password']
+        cur = mysql.connection.cursor()
+        cur.execute(f"select username, password from tbl_user where username = '{username}'")
+        user = cur.fetchone()
+        if user and pwd == user[1]:
+            session['username'] = user[0]
+            return redirect(url_for('home'))
+        else:
+            return render_template('login.html', error='Invalid username or password')
+    else:
+        return render_template('login.html')
+    
+@app.route('/register', methods=["GET", "POST"])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        cur = mysql.connection.cursor()
+        cur.execute(f"INSERT INTO tbl_user (username, password) VALUES ('{username}', '{password}')")
+        mysql.connection.commit()
+        cur.close()
+        
+        return redirect(url_for('login'))
+    
+    return render_template('register.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('home'))
+
 if __name__ == '__main__':
-    portal = Portal()
-    portal.run()
+    app.run(debug=True)
+
+
