@@ -1,15 +1,14 @@
 const movies = [
   {
-    
     title: "Sean Man",
     genre: "Action, Sci-Fi",
-    poster: "https://via.placeholder.com/300x450?text=SeanMan",
+    poster: "../static/image/seanman.jpg",
     showtimes: ["12:00", "15:00", "18:30"]
   },
   {
-    title: "LeoMan",
-    genre: "Drama, Thriller",
-    poster: "https://via.placeholder.com/300x450?text=LeoMan",
+    title: "Chitato",
+    genre: "Drama, Comedy",
+    poster: "../static/image/seanman.jpg",
     showtimes: ["13:30", "16:00", "19:45"]
   },
   {
