@@ -1,0 +1,58 @@
+<!doctype html>
+<<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OTP Generator With Email Verification</title>
+    <link rel="stylesheet" href="../static/OTP.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container step1">
+        <h2>OTP Verfication</h2><br></br>
+        <h3>Enter your email address</h3><br></br>
+        <p>You will receive an email with a one-time password</p>
+
+        <div class="form-group">
+            <input type="email" id="emailAddress" placeholder="Email Address" ><br></br>
+            
+        </div>
+        <button class="next_button">Next &rarr;</button>
+    </div>
+
+        <div class="container step2">
+        <h2>OTP Verfication</h2><br></br>
+        <h3>Enter one-time password</h3><br></br>
+        <p>one-time password has been sent to <span id="verify-email"></span></p>
+
+        <div class="otp_form">
+            <p>Enter the 4 digit code we sent you via email to continue
+            <div class="otp_group">
+                <input type=number>
+
+            </div>
+            
+        </div>
+        <button class="next_button">Next &rarr;</button>
+
+
+
+    </div>
+
+        <div class="container step3">
+        <h2>OTP Verfication</h2><br></br>
+        <h3>Enter your email address</h3><br></br>
+        <p>You will receive an email with a one-time password</p>
+
+        <div class="form-group">
+            <input type="email" id="emailAddress" placeholder="Email Address" ><br></br>
+            
+        </div>
+        <button class="next_button">Next &rarr;</button>
+
+    </div>
+    
+
+
+    <script src="{{ url_for('static', filename='OTP.js') }}"></script>
+</body>
+</html>
