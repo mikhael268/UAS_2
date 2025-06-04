@@ -1,7 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from flask_mysql import MySQL
+from flask_mysqldb import MySQL
+import os
+from flask import Flask
 
-app = Flask('__name__')
+app = Flask(__name__, template_folder='templates', static_folder='static')
+
+
 app.secret_key = '123'
 
 #mysql config 
@@ -18,3 +22,8 @@ def home():
         return render_template('halaman_depan.html', username=session['username'])
     else:
         return render_template('halaman_depan.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
