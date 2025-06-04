@@ -8,7 +8,7 @@ const movies = [
   {
     title: "Chitato",
     genre: "Drama, Comedy",
-    poster: "../static/image/seanman.jpg",
+    poster: "../static/image/chitato.jpg",
     showtimes: ["13:30", "16:00", "19:45"]
   },
   {
