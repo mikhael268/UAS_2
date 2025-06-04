@@ -1,5 +1,6 @@
 const movies = [
   {
+    
     title: "Sean Man",
     genre: "Action, Sci-Fi",
     poster: "https://via.placeholder.com/300x450?text=SeanMan",
