@@ -1,18 +1,36 @@
+<!-- File: index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Halaman Depan</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyTix - Movie Booking</title>
+  <link rel="stylesheet" href="../static/halama_depan.css" />
 </head>
 <body>
-    <h1>HOME PAGE</h1>
-    {% if username %}
-       <h3>Welcome, {{ username }}!</h3>
-       <a href="/logout">Logout</a>
-    {% else %}
-       <h3>You are not logged in. Please <a href="/login">Login</a> to access the home page.</h3>
-    {% endif %}
-    <h3>TES TES TES TESS </h3>
+  <header>
+    <h1>FilmBiru</h1>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#NowShowing">Now Showing</a>
+      <a href="#Schedule">Schedule</a>
+    </nav>
+  </header>
+
+  <section class="banner">
+    <h2>Welcome to MyTix</h2>
+    <p>Book tickets for the latest movies now!</p>
+  </section>
+
+  <section id="NowShowing">
+    <h2>Now Showing</h2>
+    <div class="movies"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 MyTix. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
-
