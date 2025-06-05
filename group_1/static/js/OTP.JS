@@ -5,10 +5,10 @@ const step1 = document.querySelector(".step1"),
     verifyEmail = document.getElementById("verifyEmail"),
     inputs = document.querySelectorAll(".otp-group input"),
     nextButton = document.querySelector('.nextButton'),
-    verifyButton = document.querySelector(".next_button"); // <- Ini sesuai tombol "Verify" di HTML kamu
+    verifyButton = document.querySelector(".next_button"); 
 
 window.addEventListener("load", () => {
-    emailjs.init("VBI2S5EbHIb55SZTm"); // Public key kamu
+    emailjs.init("VBI2S5EbHIb55SZTm"); 
     step2.style.display = "none";
     step3.style.display = "none";
     nextButton.classList.add("disable");
@@ -23,10 +23,16 @@ const validateEmail = (email) => {
     }
 };
 
+const generateOTP = ()=>{
+    return Math.floor(1000+ Math.random() *9000);
+
+};
+
+
 
 nextButton.addEventListener("click", () => {
     const email = emailAddress.value;
-    const otp = 2626; 
+    const otp = 1234;
 
 
     sessionStorage.setItem("otp", otp);
@@ -44,14 +50,14 @@ nextButton.addEventListener("click", () => {
     emailjs.send(serviceID, templateID, templateParameter)
         .then((response) => {
             console.log("SUCCESS!", response.status, response.text);
-            alert("OTP berhasil dikirim ke email!");
+            alert("OTP SENT!");
             step1.style.display = "none";
             step2.style.display = "block";
             verifyEmail.textContent = email;
         })
         .catch((error) => {
             console.error("FAILED...", error);
-            alert("Gagal mengirim OTP. Coba lagi.");
+            alert("Error while sending OTP. Please try again.");
         });
 });
 
