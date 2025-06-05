@@ -21,7 +21,7 @@ body {
 
 .movie-page-container {
     display: flex; 
-    gap: 80px; 
+    gap: 81px; 
     padding: 80px 50px; 
     max-width: 1500px; 
     width: 100%; 
