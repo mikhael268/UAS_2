@@ -37,7 +37,7 @@ button{
     height: 45px;
     cursor: pointer;
     font-size: 19px;
-    background-color:#CD001A;
+    background-color:#ff0829;
     border-radius: 30px;
     border: none;
     color: #ffffff;
@@ -80,4 +80,10 @@ input::-webkit-outer-spin-button{
 img{
     height: 150px;
     margin: 15px;
+}
+
+button.disable{
+    opacity: 0.5;
+    pointer-events: none;
+    user-select: none;
 }
