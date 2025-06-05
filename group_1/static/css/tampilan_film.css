@@ -1,7 +1,7 @@
 /* General body styling - GABUNGAN BACKGROUND TEMA LAUT (OPSI 3 - GAMBAR) */
 body {
-    /* Pastikan 'ocean_background.jpg' ada di folder 'static/image/' */
-    background-image: url('../image/sean_bckground.jpg'); /* <-- Path ini yang benar! */
+    /* Pastikan 'sean_bckground.jpg' ada di folder 'static/image/' */
+    background-image: url('../image/sean_bckground.jpg'); /* Path ini yang benar! */
     background-size: cover; /* Pastikan gambar menutupi seluruh viewport */
     background-position: center; /* Posisikan gambar di tengah */
     background-repeat: no-repeat; /* Jangan ulang gambar */
@@ -17,8 +17,6 @@ body {
     overflow-x: hidden; /* Cegah scroll horizontal pada layar kecil */
     box-sizing: border-box; /* Sertakan padding dalam total lebar dan tinggi elemen */
 }
-
-/* --- (Sisa kode CSS Anda tidak berubah) --- */
 
 /* Main container for the movie detail page */
 .movie-page-container {
@@ -92,7 +90,7 @@ body {
 
 .movie-metadata .rating-info {
     font-weight: bold;
-    color: #ff0000; /* Warna emas untuk indikator rating */
+    color: #ff0000; /* Warna merah untuk indikator rating */
 }
 
 /* Gaya untuk tombol Watch Trailer (opsional) */
@@ -126,15 +124,15 @@ body {
 .watch-trailer-button .play-icon {
     width: 18px;
     height: 18px;
-    margin-right: 5px; /* Spasi antara ikon dan teks */
+    margin-right: 5px;
 }
 
 .movie-description {
-    font-size: 1.15em; /* Ukuran disesuaikan untuk kecocokan yang lebih baik */
-    line-height: 1.7; /* Tinggi baris yang baik untuk keterbacaan */
-    margin-bottom: 35px; /* Spasi sebelum tombol BUY TICKETS */
-    max-width: 750px; /* Kontrol lebar maksimal untuk keterbacaan yang lebih baik dan sesuai contoh */
-    color: #bbb; /* Putih sedikit lebih terang untuk deskripsi */
+    font-size: 1.15em;
+    line-height: 1.7;
+    margin-bottom: 35px;
+    max-width: 750px;
+    color: #bbb;
 }
 
 /* Container untuk aksi/tombol */
@@ -147,75 +145,102 @@ body {
 
 /* Gaya untuk tombol aksi utama */
 .button {
-    background-color: #007bff; /* Biru, mirip dengan "BUY TICKETS" contoh */
-    color: #fff; /* Teks putih pada tombol */
+    background-color: #007bff;
+    color: #fff;
     border: none;
-    padding: 16px 35px; /* Padding disesuaikan untuk tampilan yang lebih ringkas */
-    font-size: 1.1em; /* Ukuran font disesuaikan untuk teks tombol */
-    font-weight: 700; /* Teks tombol tebal */
+    padding: 16px 35px;
+    font-size: 1.1em;
+    font-weight: 700;
     cursor: pointer;
-    border-radius: 6px; /* Sudut sedikit membulat */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Efek hover halus */
-    text-transform: uppercase; /* Semua huruf kapital untuk teks tombol */
-    letter-spacing: 1px; /* Spasi huruf sedikit */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Bayangan tombol halus */
+    border-radius: 6px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .button:hover {
-    background-color: #0056b3; /* Biru lebih gelap saat hover */
-    transform: translateY(-2px); /* Efek angkat sedikit saat hover */
+    background-color: #ed0808;
+    transform: translateY(-2px);
 }
 
 /* Gaya untuk placeholder rating "N/A" di bawah tombol */
 .rating-placeholder {
     font-size: 0.9em;
-    color: #777; /* Warna abu-abu */
-    margin-top: 5px; /* Spasi di atas teks N/A */
+    color: #777;
+    margin-top: 5px;
 }
 .rating-placeholder p {
-    margin: 0; /* Hapus margin paragraf default */
+    margin: 0;
 }
 
+/* Style untuk header dan logo */
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 50px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-end; /* Memposisikan logo ke kanan */
+    align-items: center;
+    z-index: 1000;
+}
+
+.logo img {
+    /* Ukuran logo yang lebih terlihat jelas di laptop */
+    height: 150px; /* Tinggi logo, sesuaikan nilai ini untuk mengubah ukurannya */
+    width: auto; /* Mempertahankan rasio aspek agar gambar tidak terdistorsi */
+    filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)); /* Memberikan sedikit bayangan untuk menonjol */
+}
 
 /* Responsive adjustments for smaller screens */
 @media (max-width: 1024px) {
     .movie-page-container {
-        flex-direction: column; /* Susun elemen secara vertikal pada layar menengah */
-        align-items: center; /* Tengahkan saat disusun */
-        text-align: center; /* Tengahkan teks untuk tata letak yang disusun */
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
         gap: 40px;
         padding: 60px 20px;
     }
 
     .movie-poster-section img {
-        height: 400px; /* Sesuaikan tinggi poster untuk tablet */
+        height: 400px;
         width: auto;
     }
 
     .movie-info-section {
-        padding-top: 0; /* Hapus padding atas saat disusun */
+        padding-top: 0;
     }
 
     .movie-title {
-        font-size: 2.8em; /* Sesuaikan ukuran judul */
-        margin-top: 20px; /* Tambah spasi di atas judul saat disusun */
+        font-size: 2.8em;
+        margin-top: 20px;
     }
 
     .movie-description {
         font-size: 1.1em;
-        max-width: 90%; /* Izinkan deskripsi mengambil lebih banyak lebar */
+        max-width: 90%;
     }
 
     .movie-meta-and-trailer {
-        align-items: center; /* Tengahkan elemen dalam blok ini saat disusun */
+        align-items: center;
     }
 
     .movie-metadata {
-        justify-content: center; /* Tengahkan metadata saat disusun */
+        justify-content: center;
     }
 
     .movie-actions {
-        justify-content: center; /* Tengahkan tombol saat disusun */
+        justify-content: center;
+    }
+
+    .main-header {
+        padding: 15px 30px;
+    }
+    .logo img {
+        height: 45px; /* Disesuaikan untuk tablet */
     }
 }
 
@@ -225,11 +250,11 @@ body {
     }
 
     .movie-poster-section img {
-        height: 320px; /* Poster lebih kecil pada layar kecil */
+        height: 320px;
     }
 
     .movie-title {
-        font-size: 2.2em; /* Judul lebih kecil lagi */
+        font-size: 2.2em;
         letter-spacing: 1px;
     }
 
@@ -243,6 +268,13 @@ body {
         padding: 14px 28px;
         font-size: 1em;
     }
+
+    .main-header {
+        padding: 10px 20px;
+    }
+    .logo img {
+        height: 35px; /* Ukuran yang pas untuk ponsel landscape */
+    }
 }
 
 @media (max-width: 480px) {
@@ -252,7 +284,7 @@ body {
     }
 
     .movie-poster-section img {
-        height: 250px; /* Ukuran poster terkecil */
+        height: 250px;
     }
 
     .movie-title {
@@ -266,22 +298,29 @@ body {
     }
 
     .button {
-        width: 100%; /* Tombol lebar penuh pada layar sangat kecil */
+        width: 100%;
         padding: 12px 20px;
         font-size: 1em;
     }
 
     .movie-actions {
-        flex-direction: column; /* Susun tombol secara vertikal pada layar sangat kecil */
+        flex-direction: column;
         gap: 15px;
     }
 
     .movie-metadata {
-        flex-direction: column; /* Susun metadata jika terlalu sempit */
+        flex-direction: column;
         gap: 5px;
         margin-bottom: 15px;
     }
     .movie-metadata span {
-        margin-right: 0; /* Hapus margin horizontal saat disusun */
+        margin-right: 0;
+    }
+
+    .main-header {
+        padding: 10px 15px;
+    }
+    .logo img {
+        height: 28px; /* Ukuran yang lebih kecil lagi untuk ponsel potret */
     }
 }
