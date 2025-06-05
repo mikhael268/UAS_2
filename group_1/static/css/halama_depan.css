@@ -12,7 +12,7 @@ body {
 }
 
 header {
-  background-color: #000;
+  background-color: #f7f7f7;
   padding: 1px;
   color: #fff;
   display: flex;
@@ -40,6 +40,7 @@ section {
 
 .movies {
   display: grid;
+  justify-content: center;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1.5rem;
   margin-top: 1rem;

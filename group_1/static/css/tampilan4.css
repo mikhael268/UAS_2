@@ -1,7 +1,7 @@
 
 body {
     
-    background-image: url('../image/sean_bckground.jpg');
+    background-image: url('../image/daniel_bckground.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -21,7 +21,7 @@ body {
 
 .movie-page-container {
     display: flex; 
-    gap: 80px; 
+    gap: 81px; 
     padding: 80px 50px; 
     max-width: 1500px; 
     width: 100%; 
@@ -309,6 +309,6 @@ body {
         padding: 10px 15px;
     }
     .logo img {
-        height: 28px;
+        height: 28px; 
     }
 }
