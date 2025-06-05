@@ -12,10 +12,16 @@ const movies = [
     showtimes: ["13:30", "16:00", "19:45"]
   },
   {
-    title: "MikMan",
-    genre: "Action, Adventure",
-    poster: "https://via.placeholder.com/300x450?text=MikMan",
+    title: "Dracula",
+    genre: "Fantasy, Romance",
+    poster: "../static/image/Dracula.png",
     showtimes: ["11:00", "14:00", "17:30"]
+  },
+  {
+    title: "Dreams",
+    genre: "Romance, Drama",
+    poster: "../static/image/Dreams.jpg",
+    showtimes: ["10:00", "13:00", "18:30"]
   }
 ];
 
