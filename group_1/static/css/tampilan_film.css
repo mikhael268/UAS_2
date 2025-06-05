@@ -1,126 +1,117 @@
-/* General body styling - GABUNGAN BACKGROUND TEMA LAUT (OPSI 3 - GAMBAR) */
+
 body {
-    /* Pastikan 'sean_bckground.jpg' ada di folder 'static/image/' */
-    background-image: url('../image/sean_bckground.jpg'); /* Path ini yang benar! */
-    background-size: cover; /* Pastikan gambar menutupi seluruh viewport */
-    background-position: center; /* Posisikan gambar di tengah */
-    background-repeat: no-repeat; /* Jangan ulang gambar */
-    background-attachment: fixed; /* Gambar tetap saat scroll */
-    color: #fff; /* Teks putih untuk kontras */
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Font modern dan bersih */
+    
+    background-image: url('../image/sean_bckground.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+    color: #fff; 
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
     margin: 0;
     padding: 0;
-    display: flex; /* Gunakan flexbox untuk menengahkan konten */
-    justify-content: center; /* Tengahkan secara horizontal */
-    align-items: center; /* Tengahkan secara vertikal */
-    min-height: 100vh; /* Pastikan mengambil tinggi viewport penuh */
-    overflow-x: hidden; /* Cegah scroll horizontal pada layar kecil */
-    box-sizing: border-box; /* Sertakan padding dalam total lebar dan tinggi elemen */
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden; 
+    box-sizing: border-box; 
 }
 
-/* Main container for the movie detail page */
+
 .movie-page-container {
-    display: flex; /* Atur poster dan info berdampingan */
-    gap: 80px; /* Jarak yang diperbesar untuk pemisahan lebih, mirip contoh */
-    padding: 80px 50px; /* Padding lebih besar di sekitar konten */
-    max-width: 1500px; /* Lebar maksimal lebih luas untuk tampilan ekspansif */
-    width: 100%; /* Ambil lebar penuh dalam max-width */
-    box-sizing: border-box; /* Sertakan padding dalam total lebar dan tinggi elemen */
-    align-items: flex-start; /* Sejajarkan item ke atas (poster dan blok teks) */
+    display: flex; 
+    gap: 80px; 
+    padding: 80px 50px; 
+    max-width: 1500px; 
+    width: 100%; 
+    box-sizing: border-box;
+    align-items: flex-start;
     
-    /* Tambahan untuk background overlay agar teks mudah dibaca di atas gambar latar */
-    background-color: rgba(0, 0, 0, 0.5); /* Overlay hitam 50% transparan */
-    border-radius: 10px; /* Sudut sedikit membulat untuk container */
-    backdrop-filter: blur(5px); /* Opsional: Efek blur halus di belakang container */
+   
+    background-color: rgba(0, 0, 0, 0.5); 
+    border-radius: 10px; 
+    backdrop-filter: blur(5px); 
 }
-
-/* Section for the movie poster */
 .movie-poster-section {
-    flex-shrink: 0; /* Cegah poster menyusut */
+    flex-shrink: 0; 
 }
 
 .movie-poster-section img {
-    height: 520px; /* Tinggi disesuaikan agar sesuai skala visual contoh */
-    width: auto; /* Pertahankan rasio aspek */
-    border-radius: 8px; /* Sudut sedikit membulat untuk poster */
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6); /* Bayangan lebih menonjol untuk kedalaman */
+    height: 520px; 
+    width: auto; 
+    border-radius: 8px; 
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6); 
 }
 
-/* Section for movie information (title, description, buttons) */
 .movie-info-section {
     display: flex;
-    flex-direction: column; /* Susun elemen secara vertikal */
-    /* PENTING: Untuk menyelaraskan judul dengan bagian atas gambar */
-    padding-top: 0; /* Dihapus padding-top sebelumnya */
+    flex-direction: column; 
+    padding-top: 0; 
 }
 
 .movie-title {
-    font-size: 3.8em; /* Judul lebih besar dan tebal */
-    font-weight: 700; /* Tebal */
-    margin-bottom: 12px; /* Mengurangi spasi di bawah judul agar meta lebih dekat */
-    text-transform: uppercase; /* Semua huruf kapital seperti contoh */
-    letter-spacing: 2px; /* Spasi antar huruf sedikit diperbesar */
-    line-height: 1.1; /* Tinggi baris lebih rapat untuk judul besar */
-    color: #fff; /* Pastikan judul berwarna putih murni */
-    /* Mungkin perlu margin-top negatif kecil di sini jika padding-top: 0; belum cukup.
-        Sesuaikan nilai ini (-1px, -2px, dst.) hingga sejajar sempurna */
+    font-size: 3.8em; 
+    font-weight: 700; 
+    margin-bottom: 12px;
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    line-height: 1.1;
+    color: #fff; 
     margin-top: -5px;
 }
 
-/* Wrapper baru untuk metadata dan potensi tombol trailer */
+
 .movie-meta-and-trailer {
     display: flex;
-    flex-direction: column; /* Susun metadata dan trailer secara vertikal */
-    margin-bottom: 25px; /* Spasi sebelum deskripsi utama */
-    color: #aaa; /* Warna lebih terang untuk blok ini */
-    font-size: 0.95em; /* Ukuran font sedikit lebih besar dari sebelumnya */
+    flex-direction: column; 
+    margin-bottom: 25px; 
+    color: #aaa; 
+    font-size: 0.95em; 
 }
 
-/* Gaya untuk metadata film (misalnya, "CBI Cinépolis", durasi) */
 .movie-metadata {
     display: flex;
     align-items: center;
-    margin-bottom: 15px; /* Spasi antara metadata dan trailer (jika trailer ada) */
+    margin-bottom: 15px; 
 }
 
 .movie-metadata span {
-    margin-right: 20px; /* Spasi lebih besar antara elemen metadata */
-    white-space: nowrap; /* Cegah teks melipat */
+    margin-right: 20px;
+    white-space: nowrap; 
 }
 
 .movie-metadata .rating-info {
     font-weight: bold;
-    color: #ff0000; /* Warna merah untuk indikator rating */
+    color: #ff0000;
 }
 
-/* Gaya untuk tombol Watch Trailer (opsional) */
+
 .trailer-button-container {
-    margin-bottom: 25px; /* Spasi antara tombol trailer dan deskripsi */
+    margin-bottom: 25px; 
 }
 
 .watch-trailer-button {
-    background: none; /* Tanpa background */
-    border: 1px solid #aaa; /* Border abu-abu terang */
-    color: #aaa; /* Teks abu-abu terang */
+    background: none;
+    border: 1px solid #aaa;
+    color: #aaa;
     padding: 8px 18px;
     font-size: 1em;
     font-weight: bold;
     border-radius: 5px;
     cursor: pointer;
-    display: inline-flex; /* Memungkinkan ikon dan teks duduk bersama */
-    align-items: center;
-    gap: 8px; /* Spasi antara ikon dan teks */
+    display: inline-flex; 
+    gap: 8px; 
     transition: all 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .watch-trailer-button:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* Background samar saat hover */
-    border-color: #fff; /* Border putih saat hover */
-    color: #fff; /* Teks putih saat hover */
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #fff; 
+    color: #fff; 
 }
-
 .watch-trailer-button .play-icon {
     width: 18px;
     height: 18px;
@@ -135,15 +126,13 @@ body {
     color: #bbb;
 }
 
-/* Container untuk aksi/tombol */
 .movie-actions {
     display: flex;
-    gap: 25px; /* Spasi antara tombol (jika Anda menambahkan lebih banyak nanti) */
-    align-items: center; /* Sejajarkan item secara vertikal dalam container flex ini */
-    margin-bottom: 15px; /* Spasi antara BUY TICKETS dan rating N/A */
+    gap: 25px;
+    align-items: center;
+    margin-bottom: 15px; 
 }
 
-/* Gaya untuk tombol aksi utama */
 .button {
     background-color: #007bff;
     color: #fff;
@@ -164,7 +153,6 @@ body {
     transform: translateY(-2px);
 }
 
-/* Gaya untuk placeholder rating "N/A" di bawah tombol */
 .rating-placeholder {
     font-size: 0.9em;
     color: #777;
@@ -174,7 +162,7 @@ body {
     margin: 0;
 }
 
-/* Style untuk header dan logo */
+
 .main-header {
     position: fixed;
     top: 0;
@@ -183,19 +171,18 @@ body {
     padding: 20px 50px;
     box-sizing: border-box;
     display: flex;
-    justify-content: flex-end; /* Memposisikan logo ke kanan */
+    justify-content: flex-end; 
     align-items: center;
     z-index: 1000;
 }
 
 .logo img {
-    /* Ukuran logo yang lebih terlihat jelas di laptop */
-    height: 150px; /* Tinggi logo, sesuaikan nilai ini untuk mengubah ukurannya */
-    width: auto; /* Mempertahankan rasio aspek agar gambar tidak terdistorsi */
-    filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)); /* Memberikan sedikit bayangan untuk menonjol */
+    height: 150px; 
+    width: auto; 
+    filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)); 
 }
 
-/* Responsive adjustments for smaller screens */
+
 @media (max-width: 1024px) {
     .movie-page-container {
         flex-direction: column;
@@ -240,7 +227,7 @@ body {
         padding: 15px 30px;
     }
     .logo img {
-        height: 45px; /* Disesuaikan untuk tablet */
+        height: 45px;
     }
 }
 
@@ -273,11 +260,12 @@ body {
         padding: 10px 20px;
     }
     .logo img {
-        height: 35px; /* Ukuran yang pas untuk ponsel landscape */
+        height: 35px; 
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 480px) 
+    {
     .movie-page-container {
         padding: 30px 10px;
         gap: 30px;
