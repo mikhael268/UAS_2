@@ -13,16 +13,16 @@
         <p>You will receive an email with a one-time password</p>
 
         <div class="form-group">
-            <input type="email" id="emailAddress" placeholder="Email Address" ><br></br>
+            <input type="email" id="emailAddress" placeholder="Email Address" onkeyup="validateEmail(this.value)"><br></br>
             
         </div>
-        <button class="next_button">Next &rarr;</button>
+        <button class="nextButton disable">Next &rarr;</button>
     </div>
 
         <div class="container step2">
         <h2>OTP Verfication</h2><br></br>
         <h3>Enter one-time password</h3><br></br>
-        <p>one-time password has been sent to <span id="verify-email"></span></p>
+        <p>one-time password has been sent to <span id="verifyEmail"></span></p>
 
         <div class="otp-form">
             <p>Enter the 4 digit code we sent you via email to continue
@@ -64,8 +64,15 @@
     </div>
     
 
+   
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+    emailjs.init("VBI2S5EbHIb55SZTm"); // Public key kamu
+    </script>
 
-   <script src="{{ url_for('static', filename='js/OTP.js') }}"></script>
+
+
+    <script src="/group_1/static/js/OTP.js"></script>
 
 </body>
 </html>
