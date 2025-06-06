@@ -14,7 +14,7 @@
     <nav>
       <a href="#">Home</a>
       <a href="#NowShowing">Now Showing</a>
-      <a href="#Schedule">Schedule</a>
+      <a href="#Schedule">Schedule</a>  
     </nav>
     </header>
 
@@ -28,7 +28,12 @@
         <img src="../static/image/seanman.jpg" alt="SeanMan" />
         <div class="overlay">
           <h4>SeanMan</h4>
-          <button>Book Now</button>
+          
+          <!-- Lagi di tes, JANGAN DIHAPUS!-->
+          <form action="{{ url_for('signup') }}" method="get">
+          <button type="submit">Book Now</button>
+
+        </form>
         </div>
       </div>
       <div class="poster-movie">

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Verify Email</title>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script src="{{ url_for('static', filename='js/otp.js') }}" defer></script>
+  <style>
+    .disable {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .otp-group input {
+      width: 30px;
+      text-align: center;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Verify Email</h2>
+  <div class="step1">
+    <p>OTP akan dikirim ke email: <strong id="verifyEmail">{{ email }}</strong></p>
+    <button id="nextButton">Kirim OTP</button>
+  </div>
+
+  <div class="step2">
+    <p>Masukkan OTP yang telah dikirim ke email:</p>
+    <div class="otp-group">
+      <input type="text" maxlength="1">
+      <input type="text" maxlength="1">
+      <input type="text" maxlength="1">
+      <input type="text" maxlength="1">
+    </div>
+    <button id="verifyButton" class="disable">Verifikasi</button>
+  </div>
+
+  <div class="step3">
+    <form action="/finish-verification" method="POST">
+      <button type="submit">Lanjutkan</button>
+    </form>
+  </div>
+</body>
+</html>
