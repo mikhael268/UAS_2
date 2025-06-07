@@ -360,7 +360,7 @@ body {
 /* Header styling */
 header {
     background-color: #ffffff;
-    padding: 10px 20px;
+    padding: 2px;
     color: #000000;
     display: flex;
     align-items: center;
@@ -374,7 +374,7 @@ header {
 }
 
 header img {
-    height: 50px;  /* Ukuran logo header */
+    height: 150px;  /* Ukuran logo header */
     width: auto;
 }
 
