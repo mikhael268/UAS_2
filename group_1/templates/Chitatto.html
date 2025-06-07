@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% comment %} <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -43,6 +43,60 @@ Dengan tekad baja, ia memulai dari bawah: bekerja di toko orang lain, menabung s
                 <p>N/A</p>
             </div>
         </div>
+    </div>
+</body>
+</html> {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CHITATTO - Detail Film</title>
+    <link rel="stylesheet" href="../static/css/tampilan2.css" />
+    <link rel="icon" href="../static/image/Logo_CineZone_aja.png" type="image/png" />
+</head>
+<body>
+    <div class="container"> <!-- Menambahkan container untuk layout -->
+        <header>
+            <img src="../static/image/CineZoneHeader.png" alt="CineZone Logo"/>
+            <nav>
+                <a href="#">Home</a>
+                <a href="#NowShowing">Now Showing</a>
+                <a href="#Schedule">Schedule</a>  
+            </nav>
+        </header>
+
+        <!-- Pembatas -->
+        <hr class="pembatas">
+
+        <!-- Section utama untuk konten film -->
+        <section>
+            <div class="bagian-movie">
+                <div class="poster-movie">
+                    <img src="../static/image/Chitato.jpg" alt="Chitato Poster">
+                    <div class="overlay">
+                        <h4>Chitato</h4>
+                        <button>View Details</button>
+                    </div>
+                </div>
+                <!-- Add more movie posters if needed -->
+            </div>
+            <div class="bagian-coming">
+                <div class="poster-coming">
+                    <img src="../static/image/ChitatoComing.jpg" alt="Coming Soon">
+                    <div class="overlay">
+                        <h4>Coming Soon</h4>
+                        <button>View Details</button>
+                    </div>
+                </div>
+                <!-- Add more coming soon posters if needed -->
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2025 CineZone. All rights reserved.</p>
+        </footer>
     </div>
 </body>
 </html>
