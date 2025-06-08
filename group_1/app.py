@@ -1,85 +1,113 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 from flask_mysqldb import MySQL
-import bcrypt
+from werkzeug.security import generate_password_hash, check_password_hash
 import MySQLdb.cursors
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = 'cinezone-secret-key'  # Ganti untuk production
 
-# Konfigurasi database MySQL
+# Konfigurasi koneksi ke database MySQL
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'Cinezone'
+app.config['MYSQL_PASSWORD'] = ''  # Kosongkan jika tanpa password
+app.config['MYSQL_DB'] = 'cinezone'
 
+# Inisialisasi koneksi
 mysql = MySQL(app)
 
-# Halaman utama
+# Halaman utama (halaman depan)
 @app.route('/')
-def index():
+def halaman_depan():
     return render_template('halaman_depan.html')
 
-# Sign Up
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
+# Halaman sign up (index.html)
+@app.route('/index')
+def index():
+    return render_template('index.html')
 
-        # Hash password sebelum disimpan
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-
-        cursor = mysql.connection.cursor()
-        cursor.execute('INSERT INTO users (username, email, password) VALUES (%s, %s, %s)',
-                       (username, email, hashed_password))
-        mysql.connection.commit()
-        cursor.close()
-
-        return redirect(url_for('login'))
-
-    return render_template('signUp.html')
-
-# Login
+# Halaman login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        next_page = request.form.get('next')  # Ambil dari input hidden
         identifier = request.form['identifier']
         password = request.form['password']
 
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute("SELECT * FROM users WHERE username = %s OR email = %s", (identifier, identifier))
-        account = cursor.fetchone()
+        cursor.execute(
+            "SELECT * FROM users WHERE username = %s OR email = %s",
+            (identifier, identifier)
+        )
+        user = cursor.fetchone()
+        cursor.close()
 
-        if account and bcrypt.checkpw(password.encode('utf-8'), account['password'].encode('utf-8')):
-            session['loggedin'] = True
-            session['id'] = account['id']
-            session['username'] = account['username']
+        if user and check_password_hash(user['password'], password):
+            session['user_id'] = user['id']
+            session['username'] = user['username']
+            print("✅ Login sukses untuk user:", user['username'])
 
-            if next_page:
-                # Pastikan tidak dobel .html
-                if not next_page.endswith('.html'):
-                    next_page += '.html'
-                return redirect(f"/{next_page}")
-            else:
-                return redirect(url_for('index'))
+            # Arahkan kembali ke halaman yang diminta sebelumnya jika ada
+            next_page = request.form.get('next')
+            return redirect(next_page or url_for('halaman_depan'))
         else:
-            return render_template('login.html', msg='Invalid credentials', next=next_page)
+            print("❌ Login gagal.")
+            return "Login failed. Please check your credentials.", 401
+    else:
+        return render_template('login.html', next=request.args.get('next', '/'))
 
-    # GET: Ambil ?next= dari URL
-    return render_template('login.html', next=request.args.get('next'))
+# Endpoint untuk menerima data user dari JavaScript (setelah OTP sukses)
+@app.route('/register_user', methods=['POST'])
+def register_user():
+    data = request.get_json()
+    print("🔵 Data dari frontend:", data)
 
-# Halaman detail film SeanMan
-@app.route('/SeanMan.html')
-def seanman():
-    return render_template('SeanMan.html')
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
 
-# Halaman reset password (OTP)
-@app.route('/reset-password')
+    if not username or not email or not password:
+        print("❌ Username/email/password kosong!")
+        return jsonify({"message": "Invalid input data"}), 400
+
+    hashed_password = generate_password_hash(password)
+    print("🟢 Hashed password:", hashed_password)
+
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute(
+            "INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
+            (username, email, hashed_password)
+        )
+        mysql.connection.commit()
+        cursor.close()
+        print("✅ User berhasil didaftarkan.")
+        return jsonify({"message": "User registered successfully!"})
+    except Exception as e:
+        print("❌ ERROR saat insert ke DB:", e)
+        return jsonify({"message": "Failed to register user."}), 500
+
+# Halaman reset password
+@app.route('/reset_password')
 def reset_password():
-    return render_template('index.html')
+    return "<h3>Coming Soon: Reset Password Page</h3>"
 
-# Jalankan aplikasi
-if __name__ == "__main__":
+# Logout
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('halaman_depan'))
+
+# ✅ Halaman film (proteksi: harus login)
+@app.route('/film/<judul>')
+def halaman_film(judul):
+    if 'user_id' not in session:
+        print("🔒 Belum login, redirect ke login.")
+        return redirect(url_for('login', next=url_for('halaman_film', judul=judul)))
+
+    # Misalnya halaman: SeanMan.html, dracula.html, dll.
+    try:
+        return render_template(f"{judul}.html")
+    except:
+        return "<h3>❌ Halaman film tidak ditemukan.</h3>", 404
+
+if __name__ == '__main__':
     app.run(debug=True)

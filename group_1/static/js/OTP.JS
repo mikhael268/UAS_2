@@ -1,22 +1,24 @@
 const step1 = document.querySelector(".step1");
 const step2 = document.querySelector(".step2");
 const step3 = document.querySelector(".step3");
+
 const emailAddress = document.getElementById("emailAddress");
-const verifyEmail = document.getElementById("verifyEmail");
-const inputs = document.querySelectorAll(".otp-group input");
 const nextButton = document.getElementById("nextButton");
 const verifyButton = document.getElementById("verifyButton");
+const verifyEmail = document.getElementById("verifyEmail");
+const inputs = document.querySelectorAll(".otp-group input");
 
 let OTP = "";
 
+// Saat halaman load, sembunyikan step 2 dan 3
 window.addEventListener("load", () => {
-    emailjs.init("VBI2S5EbHIb55SZTm");
     step2.style.display = "none";
     step3.style.display = "none";
     nextButton.classList.add("disable");
     verifyButton.classList.add("disable");
 });
 
+// Validasi email
 const validateEmail = (email) => {
     const re = /\S+@\S+\.\S+/;
     if (re.test(email)) {
@@ -30,10 +32,12 @@ emailAddress.addEventListener("input", () => {
     validateEmail(emailAddress.value);
 });
 
+// Generate OTP 4 digit
 const generateOTP = () => {
     return Math.floor(1000 + Math.random() * 9000);
 };
 
+// Deteksi pengisian OTP
 inputs.forEach((input, idx, arr) => {
     input.addEventListener("keyup", function (e) {
         if (this.value.length >= 1) {
@@ -52,54 +56,99 @@ inputs.forEach((input, idx, arr) => {
     });
 });
 
+// Saat klik NEXT
 nextButton.addEventListener("click", () => {
+    // ⬇️ Simpan email, username, password ke sessionStorage
+    const username = document.getElementById("username").value;
     const email = emailAddress.value;
-    const otp = generateOTP();
+    const password = document.getElementById("password").value;
+
+    if (!username || !email || !password) {
+        alert("Lengkapi semua field terlebih dahulu.");
+        return;
+    }
+
+    sessionStorage.setItem("username", username);
+    sessionStorage.setItem("email", email);
+    sessionStorage.setItem("password", password);
+
+    sendOTP();
+});
+
+// Kirim OTP via EmailJS
+function sendOTP() {
+    const email = sessionStorage.getItem("email");
+    OTP = generateOTP();
 
     nextButton.innerHTML = "⏳ Sending...";
     nextButton.disabled = true;
 
-    sessionStorage.setItem("otp", otp);
-    sessionStorage.setItem("email", email);
+    sessionStorage.setItem("otp", OTP);
 
-    const templateParameter = {
-        OTP: otp,
+    const templateParams = {
+        OTP: OTP,
         email: email
     };
 
-    const serviceID = 'service_1q8y3od';
-    const templateID = 'template_xhhpnxr';
+    const serviceID = 'service_1q8y3od';     // Ganti sesuai EmailJS
+    const templateID = 'template_xhhpnxr';  // Ganti sesuai EmailJS
 
-    emailjs.send(serviceID, templateID, templateParameter)
-        .then((response) => {
-            console.log("SUCCESS!", response.status, response.text);
-            alert("OTP SENT!");
+    emailjs.send(serviceID, templateID, templateParams)
+        .then(() => {
+            alert("OTP sent to " + email);
             step1.style.display = "none";
             step2.style.display = "block";
-            step3.style.display = "none";
             verifyEmail.textContent = email;
         })
         .catch((error) => {
-            console.error("FAILED...", error);
-            alert("Error while sending OTP. Please try again.");
+            console.error("OTP failed to send:", error);
+            alert("Error sending OTP. Please try again.");
         })
         .finally(() => {
             nextButton.innerHTML = "Next →";
             nextButton.disabled = false;
         });
-});
+}
 
+// Saat klik VERIFY OTP
 verifyButton.addEventListener("click", () => {
     const enteredOtp = Array.from(inputs).map(i => i.value).join("");
     const realOtp = sessionStorage.getItem("otp");
 
-    console.log("Entered OTP:", enteredOtp);
-
     if (enteredOtp === realOtp) {
-        alert("OTP match! You can now proceed.");
+        alert("OTP Verified!");
+
         step2.style.display = "none";
         step3.style.display = "block";
+
+        const username = document.getElementById("username").value;
+        const email = document.getElementById("emailAddress").value;
+        const password = document.getElementById("password").value;
+
+        fetch("/register_user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username, email, password })
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message || "Registration successful!");
+            // ⬇️ Redirect ke halaman login setelah register sukses
+            window.location.href = "/login";
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Registration failed.");
+        });
     } else {
-        alert("OTP doesn't match. Try again.");
+        alert("OTP does not match. Please try again.");
     }
 });
+
+
+// Tombol resend OTP
+function resendOTP() {
+    sendOTP();
+}

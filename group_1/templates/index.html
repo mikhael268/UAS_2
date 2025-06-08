@@ -1,78 +1,62 @@
-<!doctype html>
-<<html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>OTP Generator With Email Verification</title>
+    <title>Sign Up</title>
     <link rel="stylesheet" href="../static/css/OTP.css" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Step 1: Sign Up -->
     <div class="container step1">
-        <h2>OTP Verfication</h2><br></br>
-        <h3>Enter your email address</h3><br></br>
-        <p>You will receive an email with a one-time password</p>
+        <h2>Sign Up</h2><br>
+        <h3>Create your account</h3><br>
+        <p>Please enter your details below to receive a verification code.</p>
 
         <div class="form-group">
-            <input type="email" id="emailAddress" placeholder="Email Address" onkeyup="validateEmail(this.value)"><br></br>
-            
+            <input type="text" id="username" placeholder="Username"><br><br>
+            <input type="email" id="emailAddress" placeholder="Email Address" onkeyup="validateEmail(this.value)"><br><br>
+            <input type="password" id="password" placeholder="Password"><br><br>
         </div>
         <button id="nextButton" class="nextButton disable">Next &rarr;</button>
     </div>
 
-        <div class="container step2">
-        <h2>OTP Verfication</h2><br></br>
-        <h3>Enter one-time password</h3><br></br>
-        <p>one-time password has been sent to <span id="verifyEmail"></span></p>
+    <!-- Step 2: OTP Verification -->
+    <div class="container step2" style="display:none">
+        <h2>OTP Verification</h2><br>
+        <h3>Enter One-Time Password</h3><br>
+        <p>One-time password has been sent to <span id="verifyEmail"></span></p>
 
         <div class="otp-form">
-            <p>Enter the 4 digit code we sent you via email to continue
+            <p>Enter the 4-digit code we sent you via email to continue</p>
             <div class="otp-group">
-                <input type="number" >
-                <input type="number" >
-                <input type="number" >
-                <input type="number" >
-
+                <input type="number" maxlength="1">
+                <input type="number" maxlength="1">
+                <input type="number" maxlength="1">
+                <input type="number" maxlength="1">
             </div>
             <p>
                 Not your email? / Didn't receive the code?
-                <a href=""javascript:void(0)">Try again</a>"
+                <a href="javascript:void(0)" onclick="resendOTP()">Try again</a>
             </p>
-            
         </div>
-        <button class="next_button" id="verifyButton">Verify &rarr;</button>
-
-
-
+        <button class="next_button disable" id="verifyButton">Verify &rarr;</button>
     </div>
 
-        <div class="container step3">
-        <h2>Congratulation</h2><br></br>
-        <p>Welcome 🥳 to Home Page </p>
-        <img src="../static/image/checklist.png" alt="Checklist" >
-
-
-
-        <h3>Enter your email address</h3><br></br>
-        <p>You will receive an email with a one-time password</p>
-
-        <div class="form-group">
-            <input type="email" id="emailAddress" placeholder="Email Address" ><br></br>
-            
-        </div>
-        <button class="next_button">Next &rarr;</button>
-
+    <!-- Step 3: Success -->
+    <div class="container step3" style="display:none">
+        <h2>Congratulations</h2><br>
+        <p>Welcome 🥳 to Home Page</p>
+        <img src="../static/image/checklist.png" alt="Checklist">
     </div>
-    
 
-   
+    <!-- EmailJS -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
-    emailjs.init("VBI2S5EbHIb55SZTm"); 
+        emailjs.init("VBI2S5EbHIb55SZTm"); // Ganti dengan public key EmailJS kamu
     </script>
 
-
-
-    <script src="/group_1/static/js/OTP.js"></script>
-
+    <!-- OTP Logic -->
+    <script src="../static/js/OTP.js"></script>
 </body>
 </html>

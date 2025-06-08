@@ -1,0 +1,43 @@
+<!-- templates/register_otp.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify OTP</title>
+</head>
+<body>
+    <h2>Enter OTP</h2>
+    <input type="text" id="otpInput" placeholder="Enter OTP">
+    <button onclick="verifyOTP()">Verify</button>
+
+    <script>
+        function verifyOTP() {
+            const inputOtp = document.getElementById("otpInput").value;
+            const realOtp = localStorage.getItem("otp");
+
+            if (inputOtp === realOtp) {
+                // Kirim ke backend untuk simpan ke database
+                const user = JSON.parse(localStorage.getItem("temp_user"));
+                fetch("/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(user)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Registration successful!");
+                        localStorage.removeItem("otp");
+                        localStorage.removeItem("temp_user");
+                        window.location.href = "/login";
+                    } else {
+                        alert("Failed to register");
+                    }
+                });
+            } else {
+                alert("Invalid OTP");
+            }
+        }
+    </script>
+</body>
+</html>

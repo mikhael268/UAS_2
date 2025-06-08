@@ -3,95 +3,111 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="../static/image/Logo_CineZone_aja.png" type="image/png" />
+  <link rel="icon" href="{{ url_for('static', filename='image/Logo_CineZone_aja.png') }}" type="image/png" />
   <title>CineZone - Website</title>
-  <link rel="stylesheet" href="../static/css/halaman_depan.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/halaman_depan.css') }}" />
 </head>
 <body>
   <div class="container">
     <header>
-    <img src="../static/image/CineZoneHeader.png" alt="CineZone Logo"/>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#NowShowing">Now Showing</a>
-      <a href="#Schedule">Schedule</a>  
-    </nav>
+      <img src="{{ url_for('static', filename='image/CineZoneHeader.png') }}" alt="CineZone Logo"/>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#NowShowing">Now Showing</a>
+        <a href="#Schedule">Schedule</a>  
+        {% if session.username %}
+          <span style="color: white; margin-left: 20px;">Hi, {{ session.username }}!</span>
+          <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+          <a href="{{ url_for('login') }}">Login</a>
+        {% endif %}
+      </nav>
     </header>
 
-  <pembatas>
-  </pembatas>
+    <section id="NowShowing">
+      <h2>Now Showing</h2>
+      <div class="bagian-movie">
 
-  <section>
-    <h2>Now Showing</h2>
-    <div class=" bagian-movie">
-      <div class="poster-movie">
-        <img src="../static/image/seanman.jpg" alt="SeanMan" />
-        <div class="overlay">
-          <h4>SeanMan</h4>
-          
-          <!-- Lagi di tes, JANGAN DIHAPUS!-->
-          <form action="{{ url_for('signup') }}" method="get">
-          <button type="submit">Book Now</button>
-
-        </form>
-          <a href="../templates/SeanMan.html"><button>Book Now</button></a>
-        </div>
-      </div>
-      <div class="poster-movie">
-        <img src="../static/image/Chitato.jpg" alt="Chitatto" />
-        <div class="overlay">
-          <h4>Chitatto</h4>
-          <a href="../templates/Chitatto.html"><button>Book Now</button></a>
-        </div>
-      </div>
-      <div class="poster-movie">
-        <img src="../static/image/Dreams.jpg" alt="Dreams" />
-        <div class="overlay">
-          <h4>Dreams</h4>
-          <a href="../templates/Dreams.html"><button>Book Now</button></a>
+        <!-- SeanMan -->
+        <div class="poster-movie">
+          <img src="{{ url_for('static', filename='image/seanman.jpg') }}" alt="SeanMan" />
+          <div class="overlay">
+            <h4>SeanMan</h4>
+            <a href="{{ url_for('halaman_film', judul='SeanMan') }}">
+              <button type="button">Book Now</button>
+            </a>
           </div>
-      </div>
-      <div class="poster-movie">
-        <img src="../static/image/Draculas.png" alt="Dracula" />
-        <div class="overlay">
-          <h4>Dracula</h4>
-          <a href="../templates/Dracula.html"><button>Book Now</button></a>
-          </div>
-      </div>
-    </div>
-    <h2>Coming Soon to CineZone</h2>
-    <div class="bagian-coming">
-      <div class="poster-coming">
-        <img src="../static/image/Pembunuhan.png" alt="Pembunuhan" />
-        <div class="overlay">
-          <h4>Pembunuhan</h4>
         </div>
-      </div>
-      <div class="poster-coming">
-        <img src="../static/image/Exorcism Indo.png" alt="Exorcism Indo" />
-        <div class="overlay">
-          <h4>Exorcism Indo</h4>
-        </div>
-      </div>
-      <div class="poster-coming">
-        <img src="../static/image/Elegant Pirate.jpg" alt="Elegant Pirate" />
-        <div class="overlay">
-          <h4>Elegant Pirate</h4>
-        </div>
-      </div>
-      <div class="poster-coming">
-        <img src="../static/image/CrazyCarIndonesia.png" alt="Crazy Car Indonesia" />
-        <div class="overlay">
-          <h4>Crazy Car Indonesia</h4>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <footer>
-    <p>&copy; 2025 CineZone. All rights reserved.</p>
-  </footer>
+        <!-- Chitatto -->
+        <div class="poster-movie">
+          <img src="{{ url_for('static', filename='image/Chitato.jpg') }}" alt="Chitatto" />
+          <div class="overlay">
+            <h4>Chitatto</h4>
+            <a href="{{ url_for('halaman_film', judul='chitatto') }}">
+              <button>Book Now</button>
+            </a>
+          </div>
+        </div>
+
+        <!-- Dreams -->
+        <div class="poster-movie">
+          <img src="{{ url_for('static', filename='image/Dreams.jpg') }}" alt="Dreams" />
+          <div class="overlay">
+            <h4>Dreams</h4>
+            <a href="{{ url_for('halaman_film', judul='Dreams') }}">
+              <button>Book Now</button>
+            </a>
+          </div>
+        </div>
+
+        <!-- Dracula -->
+        <div class="poster-movie">
+          <img src="{{ url_for('static', filename='image/Draculas.png') }}" alt="Dracula" />
+          <div class="overlay">
+            <h4>Dracula</h4>
+            <a href="{{ url_for('halaman_film', judul='dracula') }}">
+              <button>Book Now</button>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <h2>Coming Soon to CineZone</h2>
+      <div class="bagian-coming">
+        <div class="poster-coming">
+          <img src="{{ url_for('static', filename='image/Pembunuhan.png') }}" alt="Pembunuhan" />
+          <div class="overlay">
+            <h4>Pembunuhan</h4>
+          </div>
+        </div>
+
+        <div class="poster-coming">
+          <img src="{{ url_for('static', filename='image/Exorcism Indo.png') }}" alt="Exorcism Indo" />
+          <div class="overlay">
+            <h4>Exorcism Indo</h4>
+          </div>
+        </div>
+
+        <div class="poster-coming">
+          <img src="{{ url_for('static', filename='image/Elegant Pirate.jpg') }}" alt="Elegant Pirate" />
+          <div class="overlay">
+            <h4>Elegant Pirate</h4>
+          </div>
+        </div>
+
+        <div class="poster-coming">
+          <img src="{{ url_for('static', filename='image/CrazyCarIndonesia.png') }}" alt="Crazy Car Indonesia" />
+          <div class="overlay">
+            <h4>Crazy Car Indonesia</h4>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2025 CineZone. All rights reserved.</p>
+    </footer>
   </div>
-  
 </body>
 </html>
