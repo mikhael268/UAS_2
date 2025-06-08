@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import MySQLdb.cursors
 
 app = Flask(__name__)
-app.secret_key = 'cinezone-secret-key'
+app.secret_key = '123'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'

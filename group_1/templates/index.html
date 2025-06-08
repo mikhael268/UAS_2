@@ -7,10 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Step 1: Sign Up -->
+
     <div class="container step1">
-        <h2>Sign Up</h2><br>
-        <h3>Create your account</h3><br>
+        <h1>Sign Up</h1><br>
+        <h2>Create your account</h2><br>
         <p>Please enter your details below to receive a verification code.</p>
 
         <div class="form-group">
@@ -19,7 +19,7 @@
             <input type="password" id="password" placeholder="Password"><br><br>
         </div>
         <button id="nextButton" class="nextButton disable">Next &rarr;</button>
-        
+
         <p class="login-link">
             Already have an account?
             <a href="{{ url_for('login') }}">Click here to log in</a>.
@@ -27,7 +27,7 @@
 
     </div>
 
-    <!-- Step 2: OTP Verification -->
+
     <div class="container step2" style="display:none">
         <h2>OTP Verification</h2><br>
         <h3>Enter One-Time Password</h3><br>
@@ -49,14 +49,14 @@
         <button class="next_button disable" id="verifyButton">Verify &rarr;</button>
     </div>
 
-    <!-- Step 3: Success -->
+
     <div class="container step3" style="display:none">
         <h2>Congratulations</h2><br>
         <p>Welcome 🥳 please login first</p>
         <img src="../static/image/checklist.png" alt="Checklist">
     </div>
 
-    <!-- EmailJS -->
+
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
         emailjs.init("VBI2S5EbHIb55SZTm"); 

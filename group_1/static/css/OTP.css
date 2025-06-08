@@ -1,4 +1,4 @@
-body{
+body {
     background-image: url("/static/image/cinema_for_background.png");
     background-size: cover;
     background-position: center;
@@ -9,63 +9,84 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.container{
-    background: #FFFFFF;
+.container {
+    background: #e8d58d;
     width: 400px;
-    border-radius: 5px;
+    border-radius: 8px;
     padding: 25px;
     text-align: center;
-
-
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    color: #333;
 }
 
-.form-group{
+.container h1,
+.container h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #3b2e1f;
+}
+
+.form-group {
     margin: 20px 0;
-
 }
 
-.form-group input{
-    height: 35px; 
+.form-group input {
+    height: 35px;
     width: 80%;
     font-size: 15px;
     padding: 15px;
     outline: none;
-    border: 1px solid #000000;
+    border: 1px solid #cba135;
+    background-color: #fdfaf0;
+    color: #4a3f2a;
+    border-radius: 6px;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-button{
-    width:100%;
+.form-group input::placeholder {
+    color: #6b5f4a;
+    opacity: 0.8;
+}
+
+.form-group input:focus {
+    border-color: #d1a942;
+    box-shadow: 0 0 5px #e6c679;
+}
+
+button {
+    width: 100%;
     height: 45px;
     cursor: pointer;
     font-size: 19px;
-    background-color:#ff0829;
+    background-color: #cba135;
     border-radius: 30px;
     border: none;
     color: #ffffff;
     margin-bottom: 20px;
+    transition: background-color 0.3s;
 }
 
-.otp-form{
+button:hover {
+    background-color: #b88e2f;
+}
+
+.otp-form {
     display: block;
-    margin: 20px 0;
-}
-
-.otp-form  {
     margin: 20px;
-    color: green;
+    color: #2d8a4b;
 }
 
-.otp-group{
+.otp-group {
     display: flex;
     gap: 30px;
     justify-content: center;
     margin: 20px;
 }
 
-.otp-group input{
+.otp-group input {
     height: 50px;
     width: 50px;
     padding: 5px;
@@ -73,20 +94,28 @@ button{
     text-align: center;
     outline: none;
     border: none;
-    border-bottom: 2px solid #a3a3a3 ;
-
+    border-bottom: 2px solid #cba135;
+    background-color: #fdfaf0;
+    color: #4a3f2a;
+    border-radius: 4px;
 }
+
+.otp-group input::placeholder {
+    color: #6b5f4a;
+}
+
 input::-webkit-inner-spin-button,
-input::-webkit-outer-spin-button{
+input::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-img{
+
+img {
     height: 150px;
     margin: 15px;
 }
 
-button.disable{
+button.disable {
     opacity: 0.5;
     pointer-events: none;
     user-select: none;
