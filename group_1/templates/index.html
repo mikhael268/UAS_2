@@ -19,6 +19,12 @@
             <input type="password" id="password" placeholder="Password"><br><br>
         </div>
         <button id="nextButton" class="nextButton disable">Next &rarr;</button>
+        
+        <p class="login-link">
+            Already have an account?
+            <a href="{{ url_for('login') }}">Click here to log in</a>.
+        </p>
+
     </div>
 
     <!-- Step 2: OTP Verification -->

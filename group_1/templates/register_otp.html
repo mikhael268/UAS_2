@@ -15,7 +15,7 @@
             const realOtp = localStorage.getItem("otp");
 
             if (inputOtp === realOtp) {
-                // Kirim ke backend untuk simpan ke database
+       
                 const user = JSON.parse(localStorage.getItem("temp_user"));
                 fetch("/register", {
                     method: "POST",

@@ -1,5 +1,5 @@
-body{
-    background-image: url("/static/image/cinema_for_background.png");
+body {
+    background-image: url("/static/image/cinema_for_reset.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -9,63 +9,69 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-
+    font-family: 'Roboto', sans-serif;
 }
 
-.container{
-    background: #FFFFFF;
+.container {
+    background: #1e1e1e; 
     width: 400px;
-    border-radius: 5px;
+    border-radius: 8px;
     padding: 25px;
     text-align: center;
-
-
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    color: #f5f5f5;
 }
 
-.form-group{
+.form-group {
     margin: 20px 0;
-
 }
 
-.form-group input{
-    height: 35px; 
+.form-group input {
+    height: 35px;
     width: 80%;
     font-size: 15px;
     padding: 15px;
     outline: none;
-    border: 1px solid #000000;
+    border: 1px solid #c89b3c; 
+    background-color: #2b2b2b; 
+    color: #f5e9c8; 
+    border-radius: 4px;
 }
 
-button{
-    width:100%;
+.form-group input::placeholder {
+    color: #c8b37e;
+}
+
+button {
+    width: 100%;
     height: 45px;
     cursor: pointer;
     font-size: 19px;
-    background-color:#ff0829;
+    background-color: #c89b3c; 
     border-radius: 30px;
     border: none;
-    color: #ffffff;
+    color: #1e1e1e; 
     margin-bottom: 20px;
+    transition: background-color 0.3s ease;
 }
 
-.otp-form{
-    display: block;
-    margin: 20px 0;
+button:hover {
+    background-color: #b3882d;
 }
 
-.otp-form  {
+.otp-form {
     margin: 20px;
-    color: green;
+    color: #50fa7b; 
 }
 
-.otp-group{
+.otp-group {
     display: flex;
     gap: 30px;
     justify-content: center;
     margin: 20px;
 }
 
-.otp-group input{
+.otp-group input {
     height: 50px;
     width: 50px;
     padding: 5px;
@@ -73,20 +79,24 @@ button{
     text-align: center;
     outline: none;
     border: none;
-    border-bottom: 2px solid #a3a3a3 ;
-
+    border-bottom: 2px solid #c89b3c;
+    background-color: #2b2b2b;
+    color: #f5e9c8;
 }
+
 input::-webkit-inner-spin-button,
-input::-webkit-outer-spin-button{
+input::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-img{
+
+img {
     height: 150px;
     margin: 15px;
+    filter: brightness(0.9);
 }
 
-button.disable{
+button.disable {
     opacity: 0.5;
     pointer-events: none;
     user-select: none;

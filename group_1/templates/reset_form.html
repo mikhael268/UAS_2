@@ -9,31 +9,31 @@
 <body>
     <div class="container">
         <h2>Reset Password</h2><br>
-        <p>Silakan masukkan password baru untuk akun <span id="emailDisplay"></span></p><br>
+        <p>Please enter a new password for the account <span id="emailDisplay"></span></p><br>
 
         <div class="form-group">
-            <input type="password" id="newPassword" placeholder="Password Baru"><br><br>
-            <input type="password" id="confirmPassword" placeholder="Konfirmasi Password"><br><br>
+            <input type="password" id="newPassword" placeholder="New Password"><br><br>
+            <input type="password" id="confirmPassword" placeholder="Confirm Password"><br><br>
         </div>
-        <button onclick="resetPassword()" class="nextButton">Ubah Password</button>
+        <button onclick="resetPassword()" class="nextButton">Change Password</button>
         <p id="status" style="color: red; margin-top: 10px;"></p>
     </div>
 
     <script>
         const email = sessionStorage.getItem("reset_email");
-        document.getElementById("emailDisplay").innerText = email || "(email tidak ditemukan)";
+        document.getElementById("emailDisplay").innerText = email || "(email not found)";
 
         function resetPassword() {
             const newPassword = document.getElementById("newPassword").value;
             const confirmPassword = document.getElementById("confirmPassword").value;
 
             if (!newPassword || !confirmPassword) {
-                document.getElementById("status").innerText = "Password tidak boleh kosong.";
+                document.getElementById("status").innerText = "Password cannot be empty.";
                 return;
             }
 
             if (newPassword !== confirmPassword) {
-                document.getElementById("status").innerText = "Password tidak sama.";
+                document.getElementById("status").innerText = "Passwords do not match.";
                 return;
             }
 
@@ -46,13 +46,13 @@
             .then(data => {
                 if (data.success) {
                     document.getElementById("status").style.color = "green";
-                    document.getElementById("status").innerText = "Password berhasil diubah. Arahkan ke halaman login...";
+                    document.getElementById("status").innerText = "Password has been changed successfully. Redirecting to the login page...";
                     setTimeout(() => {
                         sessionStorage.removeItem("reset_email");
                         window.location.href = "/login"; 
                     }, 2000);
                 } else {
-                    document.getElementById("status").innerText = "Gagal mengubah password.";
+                    document.getElementById("status").innerText = "Failed to change password.";
                 }
             });
         }

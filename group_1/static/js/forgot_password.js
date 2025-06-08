@@ -7,7 +7,7 @@ function sendOTP() {
     const status = document.getElementById('status');
 
     if (!email) {
-        status.innerText = 'Email tidak boleh kosong.';
+        status.innerText = 'Email cannot be empty.';
         status.style.color = 'red';
         return;
     }
@@ -34,12 +34,12 @@ function sendOTP() {
             document.querySelector('.step2').style.display = 'block';
             document.getElementById('verifyEmail').innerText = email;
             status.style.color = 'green';
-            status.innerText = 'OTP berhasil dikirim!';
+            status.innerText = 'OTP has been sent successfully!';
         })
         .catch(error => {
             console.error('EmailJS Error:', error);
             status.style.color = 'red';
-            status.innerText = 'Gagal mengirim OTP.';
+            status.innerText = 'Failed to send OTP.';
         });
 }
 
@@ -53,7 +53,7 @@ function verifyOTP() {
     const enteredOTP = Array.from(inputs).map(input => input.value.trim()).join('');
 
     if (enteredOTP.length !== 4) {
-        status.innerText = 'Harap masukkan 4 digit OTP.';
+        status.innerText = 'Please enter the 4-digit OTP.';
         status.style.color = 'red';
         return;
     }
@@ -67,23 +67,23 @@ function verifyOTP() {
     .then(data => {
         if (data.valid) {
             status.style.color = 'green';
-            status.innerText = 'OTP valid, mengarahkan ke halaman reset password...';
+            status.innerText = 'OTP valid, directing to the password reset page...';
 
             
             sessionStorage.setItem('reset_email', emailUsed);
 
             setTimeout(() => {
-                window.location.href = '/reset_form'; // ⛳ Pastikan ada route ini di app.py
+                window.location.href = '/reset_form'; 
             }, 1500);
         } else {
             status.style.color = 'red';
-            status.innerText = 'OTP salah!';
+            status.innerText = 'The OTP is incorrect.!';
         }
     })
     .catch(err => {
         console.error('OTP Verification Error:', err);
         status.style.color = 'red';
-        status.innerText = 'Terjadi kesalahan saat verifikasi.';
+        status.innerText = 'An error occurred during verification..';
     });
 }
 

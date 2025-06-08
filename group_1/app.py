@@ -143,7 +143,12 @@ def reset_password_final():
 
 @app.route('/reset_form')
 def reset_form():
-    return render_template('reset_form.html')  #
+    return render_template('reset_form.html')  
+
+@app.route('/register', methods=['GET'])
+def register():
+    return render_template('register.html')
+
 
 
 if __name__ == '__main__':
