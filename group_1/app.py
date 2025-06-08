@@ -4,12 +4,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import MySQLdb.cursors
 
 app = Flask(__name__)
-app.secret_key = 'cinezone-secret-key'  # Ganti untuk production
+app.secret_key = 'cinezone-secret-key'  
 
 # Konfigurasi koneksi ke database MySQL
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''  # Kosongkan jika tanpa password
+app.config['MYSQL_PASSWORD'] = ''  
 app.config['MYSQL_DB'] = 'cinezone'
 
 # Inisialisasi koneksi
@@ -100,14 +100,16 @@ def logout():
 @app.route('/film/<judul>')
 def halaman_film(judul):
     if 'user_id' not in session:
-        print("🔒 Belum login, redirect ke login.")
-        return redirect(url_for('login', next=url_for('halaman_film', judul=judul)))
+        # Redirect ke halaman sign up (bisa pakai next untuk kembali nanti)
+        return redirect(url_for('index', next=url_for('halaman_film', judul=judul)))
 
-    # Misalnya halaman: SeanMan.html, dracula.html, dll.
-    try:
-        return render_template(f"{judul}.html")
-    except:
-        return "<h3>❌ Halaman film tidak ditemukan.</h3>", 404
+    return render_template(f"{judul}.html")
+
+# Halaman sign up (form pendaftaran)
+@app.route('/signup')
+def signup():
+    return render_template('signUp.html', next=request.args.get('next'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
