@@ -10,7 +10,7 @@ const inputs = document.querySelectorAll(".otp-group input");
 
 let OTP = "";
 
-// Saat halaman load, sembunyikan step 2 dan 3
+
 window.addEventListener("load", () => {
     step2.style.display = "none";
     step3.style.display = "none";
@@ -18,7 +18,7 @@ window.addEventListener("load", () => {
     verifyButton.classList.add("disable");
 });
 
-// Validasi email
+
 const validateEmail = (email) => {
     const re = /\S+@\S+\.\S+/;
     if (re.test(email)) {
@@ -32,12 +32,12 @@ emailAddress.addEventListener("input", () => {
     validateEmail(emailAddress.value);
 });
 
-// Generate OTP 4 digit
+
 const generateOTP = () => {
     return Math.floor(1000 + Math.random() * 9000);
 };
 
-// Deteksi pengisian OTP
+
 inputs.forEach((input, idx, arr) => {
     input.addEventListener("keyup", function (e) {
         if (this.value.length >= 1) {
@@ -56,9 +56,9 @@ inputs.forEach((input, idx, arr) => {
     });
 });
 
-// Saat klik NEXT
+
 nextButton.addEventListener("click", () => {
-    // ⬇️ Simpan email, username, password ke sessionStorage
+ 
     const username = document.getElementById("username").value;
     const email = emailAddress.value;
     const password = document.getElementById("password").value;
@@ -75,7 +75,7 @@ nextButton.addEventListener("click", () => {
     sendOTP();
 });
 
-// Kirim OTP via EmailJS
+
 function sendOTP() {
     const email = sessionStorage.getItem("email");
     OTP = generateOTP();
@@ -90,8 +90,8 @@ function sendOTP() {
         email: email
     };
 
-    const serviceID = 'service_1q8y3od';     // Ganti sesuai EmailJS
-    const templateID = 'template_xhhpnxr';  // Ganti sesuai EmailJS
+    const serviceID = 'service_1q8y3od';     
+    const templateID = 'template_xhhpnxr';  
 
     emailjs.send(serviceID, templateID, templateParams)
         .then(() => {
@@ -110,7 +110,7 @@ function sendOTP() {
         });
 }
 
-// Saat klik VERIFY OTP
+
 verifyButton.addEventListener("click", () => {
     const enteredOtp = Array.from(inputs).map(i => i.value).join("");
     const realOtp = sessionStorage.getItem("otp");
@@ -135,7 +135,7 @@ verifyButton.addEventListener("click", () => {
         .then(res => res.json())
         .then(data => {
             alert(data.message || "Registration successful!");
-            // ⬇️ Redirect ke halaman login setelah register sukses
+
             window.location.href = "/login";
         })
         .catch(err => {
@@ -148,7 +148,6 @@ verifyButton.addEventListener("click", () => {
 });
 
 
-// Tombol resend OTP
 function resendOTP() {
     sendOTP();
 }

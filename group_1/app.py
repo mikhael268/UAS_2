@@ -4,28 +4,58 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import MySQLdb.cursors
 
 app = Flask(__name__)
-app.secret_key = 'cinezone-secret-key'  
+app.secret_key = 'cinezone-secret-key'
 
-# Konfigurasi koneksi ke database MySQL
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''  
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'cinezone'
 
-# Inisialisasi koneksi
+
 mysql = MySQL(app)
 
-# Halaman utama (halaman depan)
+
+pending_resets = {}
+
+
 @app.route('/')
 def halaman_depan():
     return render_template('halaman_depan.html')
 
-# Halaman sign up (index.html)
+
+
 @app.route('/index')
 def index():
     return render_template('index.html')
 
-# Halaman login
+@app.route('/signup')
+def signup():
+    return render_template('signUp.html', next=request.args.get('next'))
+
+@app.route('/register_user', methods=['POST'])
+def register_user():
+    data = request.get_json()
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+
+    if not username or not email or not password:
+        return jsonify({"message": "Invalid input data"}), 400
+
+    hashed_password = generate_password_hash(password)
+
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)", 
+                       (username, email, hashed_password))
+        mysql.connection.commit()
+        cursor.close()
+        return jsonify({"message": "User registered successfully!"})
+    except Exception as e:
+        print("Insert error:", e)
+        return jsonify({"message": "Failed to register user."}), 500
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -33,82 +63,87 @@ def login():
         password = request.form['password']
 
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute(
-            "SELECT * FROM users WHERE username = %s OR email = %s",
-            (identifier, identifier)
-        )
+        cursor.execute("SELECT * FROM users WHERE username = %s OR email = %s", 
+                       (identifier, identifier))
         user = cursor.fetchone()
         cursor.close()
 
         if user and check_password_hash(user['password'], password):
             session['user_id'] = user['id']
             session['username'] = user['username']
-            print("✅ Login sukses untuk user:", user['username'])
-
-            # Arahkan kembali ke halaman yang diminta sebelumnya jika ada
             next_page = request.form.get('next')
             return redirect(next_page or url_for('halaman_depan'))
         else:
-            print("❌ Login gagal.")
             return "Login failed. Please check your credentials.", 401
     else:
         return render_template('login.html', next=request.args.get('next', '/'))
 
-# Endpoint untuk menerima data user dari JavaScript (setelah OTP sukses)
-@app.route('/register_user', methods=['POST'])
-def register_user():
-    data = request.get_json()
-    print("🔵 Data dari frontend:", data)
-
-    username = data.get('username')
-    email = data.get('email')
-    password = data.get('password')
-
-    if not username or not email or not password:
-        print("❌ Username/email/password kosong!")
-        return jsonify({"message": "Invalid input data"}), 400
-
-    hashed_password = generate_password_hash(password)
-    print("🟢 Hashed password:", hashed_password)
-
-    try:
-        cursor = mysql.connection.cursor()
-        cursor.execute(
-            "INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
-            (username, email, hashed_password)
-        )
-        mysql.connection.commit()
-        cursor.close()
-        print("✅ User berhasil didaftarkan.")
-        return jsonify({"message": "User registered successfully!"})
-    except Exception as e:
-        print("❌ ERROR saat insert ke DB:", e)
-        return jsonify({"message": "Failed to register user."}), 500
-
-# Halaman reset password
-@app.route('/reset_password')
-def reset_password():
-    return "<h3>Coming Soon: Reset Password Page</h3>"
-
-# Logout
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('halaman_depan'))
 
-# ✅ Halaman film (proteksi: harus login)
+
+
 @app.route('/film/<judul>')
 def halaman_film(judul):
     if 'user_id' not in session:
-        # Redirect ke halaman sign up (bisa pakai next untuk kembali nanti)
         return redirect(url_for('index', next=url_for('halaman_film', judul=judul)))
-
     return render_template(f"{judul}.html")
 
-# Halaman sign up (form pendaftaran)
-@app.route('/signup')
-def signup():
-    return render_template('signUp.html', next=request.args.get('next'))
+
+@app.route('/forget_password')
+def forget_password():
+    return render_template('forgot_password.html')
+
+
+@app.route('/store_reset_otp', methods=['POST'])
+def store_reset_otp():
+    data = request.get_json()
+    email = data.get('email')
+    otp = data.get('otp')
+    if email and otp:
+        pending_resets[email] = otp
+        return jsonify({"message": "OTP stored."})
+    return jsonify({"message": "Invalid request"}), 400
+
+
+@app.route('/verify_reset_otp', methods=['POST'])
+def verify_reset_otp():
+    data = request.get_json()
+    email = data.get('email')
+    otp = data.get('otp')
+
+    if email in pending_resets and pending_resets[email] == otp:
+        return jsonify({"valid": True})
+    return jsonify({"valid": False})
+
+
+@app.route('/reset_password_final', methods=['POST'])
+def reset_password_final():
+    data = request.get_json()
+    email = data.get('email')
+    new_password = data.get('new_password')
+
+    if not email or not new_password:
+        return jsonify({"success": False, "message": "Missing data"})
+
+    try:
+        hashed_password = generate_password_hash(new_password)
+        cursor = mysql.connection.cursor()
+        cursor.execute("UPDATE users SET password = %s WHERE email = %s", 
+                       (hashed_password, email))
+        mysql.connection.commit()
+        cursor.close()
+        pending_resets.pop(email, None)
+        return jsonify({"success": True})
+    except Exception as e:
+        print("Password reset error:", e)
+        return jsonify({"success": False, "message": "DB error"})
+
+@app.route('/reset_form')
+def reset_form():
+    return render_template('reset_form.html')  #
 
 
 if __name__ == '__main__':
