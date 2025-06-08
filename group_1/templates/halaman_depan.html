@@ -12,9 +12,6 @@
     <header>
       <img src="{{ url_for('static', filename='image/CineZoneHeader.png') }}" alt="CineZone Logo"/>
       <nav>
-        <a href="#">Home</a>
-        <a href="#NowShowing">Now Showing</a>
-        <a href="#Schedule">Schedule</a>  
         {% if session.username %}
           <span style="color: white; margin-left: 20px;">Hi, {{ session.username }}!</span>
           <a href="{{ url_for('logout') }}">Logout</a>
