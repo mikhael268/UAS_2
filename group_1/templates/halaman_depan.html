@@ -12,8 +12,8 @@
     <header>
       <img src="{{ url_for('static', filename='image/CineZoneHeader.png') }}" alt="CineZone Logo"/>
       <nav>
-        {% if session.username %}
-          <span style="color: white; margin-left: 20px;">Hi, {{ session.username }}!</span>
+        {% if session.get('username') %}
+          <span style="color: white; margin-left: 20px;">Hi, {{ session.get('username') }}!</span>
           <a href="{{ url_for('logout') }}">Logout</a>
         {% else %}
           <a href="{{ url_for('login') }}">Login</a>
@@ -52,7 +52,7 @@
           <img src="{{ url_for('static', filename='image/Dreams.jpg') }}" alt="Dreams" />
           <div class="overlay">
             <h4>Dreams</h4>
-            <a href="{{ url_for('halaman_film', judul='Dreams') }}">
+            <a href="{{ url_for('halaman_film', judul='dreams') }}">
               <button>Book Now</button>
             </a>
           </div>

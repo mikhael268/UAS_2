@@ -1,15 +1,14 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session, make_response
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import flash
 import MySQLdb.cursors
 from io import BytesIO
 from reportlab.pdfgen import canvas
 
 app = Flask(__name__)
-app.secret_key = '123'
+app.secret_key = '123'  # Session secret key
 
-# Konfigurasi koneksi MySQL
+# MySQL Configuration
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
@@ -20,7 +19,7 @@ app.config['MYSQL_DB'] = 'cinezone_db'
 mysql = MySQL(app)
 pending_resets = {}
 
-# ================== ROUTES ==================
+# ================= ROUTES =================
 
 @app.route('/')
 def halaman_depan():
@@ -29,7 +28,6 @@ def halaman_depan():
 @app.route('/index')
 def index():
     return render_template('index.html')
-
 
 
 @app.route('/register_user', methods=['POST'])
@@ -57,6 +55,7 @@ def register_user():
         print("Insert error:", e)
         return jsonify({"message": "Failed to register user."}), 500
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -70,24 +69,27 @@ def login():
 
         if user and check_password_hash(user['password'], password):
             session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            session['username'] = user['username']
+            return redirect(url_for('halaman_depan'))  # 🔁 REDIRECT FIXED
         else:
             flash("Username or password is incorrect", "error")
-            return render_template('login.html', next=request.form.get('next'))
+            return render_template('login.html')
     else:
-        return render_template('login.html', next=request.args.get('next'))
+        return render_template('login.html')
+
 
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('login'))  
+    return redirect(url_for('halaman_depan'))
 
 
 @app.route('/film/<judul>')
 def halaman_film(judul):
     if 'user_id' not in session:
-        return redirect(url_for('index', next=url_for('halaman_film', judul=judul)))
+        return redirect(url_for('index'))  
     return render_template(f"{judul}.html")
+
 
 @app.route('/forget_password')
 def forget_password():
@@ -137,22 +139,25 @@ def reset_password_final():
         print("Password reset error:", e)
         return jsonify({"success": False, "message": "DB error"})
 
+
 @app.route('/reset_form')
 def reset_form():
     return render_template('reset_form.html')
+
 
 @app.route('/register', methods=['GET'])
 def register():
     return render_template('register.html')
 
-# ============ Format Rupiah Helper ============
 
+# Format harga rupiah
 def format_rupiah(value):
     return "Rp.{:,.2f}".format(value).replace(",", "#").replace(".", ",").replace("#", ".")
 
 app.jinja_env.filters['format_rupiah'] = format_rupiah
 
-# ============ Halaman Film Individu ============
+
+# ================= Halaman Film =================
 
 @app.route('/seanman')
 def seanman():
@@ -170,7 +175,8 @@ def dracula():
 def dreams():
     return render_template('dreams_film.html')
 
-# ============ Booking Film ============
+
+# ================= Booking =================
 
 @app.route('/confirm')
 def confirm():
@@ -184,54 +190,19 @@ def submit_booking():
     harga = int(request.form.get('harga'))
     total = harga * jumlah
 
-    sql = "INSERT INTO bookings (nama_film, jam_tayang, jumlah_kursi, total_harga) VALUES (%s, %s, %s, %s)"
-    val = (film, jadwal, jumlah, total)
-
     cursor = mysql.connection.cursor()
-    cursor.execute(sql, val)
+    cursor.execute(
+        "INSERT INTO bookings (nama_film, jam_tayang, jumlah_kursi, total_harga) VALUES (%s, %s, %s, %s)",
+        (film, jadwal, jumlah, total)
+    )
     mysql.connection.commit()
     cursor.close()
 
     beli_lagi_url = f"/{film.lower()}"
-    return render_template(
-        'success.html',
-        film=film,
-        jadwal=jadwal,
-        jumlah=jumlah,
-        harga=harga,
-        total=total,
-        beli_lagi_url=beli_lagi_url
-    )
+    return render_template('success.html', film=film, jadwal=jadwal, jumlah=jumlah, harga=harga, total=total, beli_lagi_url=beli_lagi_url)
 
-# ============ PDF Generator ============
 
-@app.route('/download_pdf')
-def download_pdf():
-    film = request.args.get('film')
-    jadwal = request.args.get('jadwal')
-    jumlah = request.args.get('jumlah')
-    harga = int(request.args.get('harga'))
-    total = int(request.args.get('total'))
-
-    buffer = BytesIO()
-    p = canvas.Canvas(buffer)
-    p.drawString(100, 800, f"Booking Berhasil ✅")
-    p.drawString(100, 770, f"Film: {film}")
-    p.drawString(100, 750, f"Jam Tayang: {jadwal}")
-    p.drawString(100, 730, f"Jumlah Kursi: {jumlah}")
-    p.drawString(100, 710, f"Harga per Kursi: Rp {harga:,}")
-    p.drawString(100, 690, f"Total Harga: Rp {total:,}")
-    p.drawString(100, 660, "Terima kasih atas pemesanan Anda!")
-    p.showPage()
-    p.save()
-
-    buffer.seek(0)
-    response = make_response(buffer.read())
-    response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'attachment; filename=bukti_booking.pdf'
-    return response
-
-# ============ Run Aplikasi ============
+# ================= Run Server =================
 
 if __name__ == '__main__':
     app.run(debug=True)
