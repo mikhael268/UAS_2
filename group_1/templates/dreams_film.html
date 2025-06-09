@@ -4,9 +4,26 @@
   <meta charset="UTF-8" />
   <title>Dreams - Booking Kursi</title> 
   <link rel="stylesheet" href="/static/css/styles.css" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url("/static/image/daniel_bckground.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: white;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+
+
 </head>
 <body>
-  <img src="{{ url_for('static', filename='image/Cine_Zone.png') }}" width="180" style="position: absolute; top: 5px; left: 5px;">
+  <img src="{{ url_for('static', filename='image/Cine_Zone.png') }}" width="100" style="position: absolute; top: 5px; left: 5px;">
 
   <div class="center-wrapper">
     <div class="container">

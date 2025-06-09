@@ -4,14 +4,30 @@
   <meta charset="UTF-8" />
   <title>Seanman - Booking Kursi</title>
   <link rel="stylesheet" href="/static/css/styles.css" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url("/static/image/sean_bckground.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: white;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+
 </head>
 <body>
-  <img src="{{ url_for('static', filename='image/Cine_Zone.png') }}" width="180" style="position: absolute; top: 5px; left: 5px;">
+  <img src="{{ url_for('static', filename='image/Cine_Zone.png') }}" width="100" style="position: absolute; top: 5px; left: 5px;">
   <div class="center-wrapper">
     <div class="container">
       <h1 id="judulFilm">SEANMAN</h1>
     <div style="text-align: center; margin-top: 10px;">
-        <img src="{{ url_for('static', filename='image/seanman.png') }}" alt="Dracula Poster" style="max-width: 200px; height: auto; border-radius: 8px;">
+        <img src="{{ url_for('static', filename='image/seanman.png') }}" alt="Seanman Poster" style="max-width: 200px; height: auto; border-radius: 8px;">
     </div>
 
       <p class="price">Harga: Rp50.000,00</p>
