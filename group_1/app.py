@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session, make_response
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
 import MySQLdb.cursors
+from io import BytesIO
+from reportlab.pdfgen import canvas
 
 app = Flask(__name__)
 app.secret_key = '123'
@@ -13,7 +15,6 @@ app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'cinezone_db'
 
 mysql = MySQL(app)
-
 pending_resets = {}
 
 # ================== ROUTES ==================
@@ -146,14 +147,12 @@ def reset_form():
 def register():
     return render_template('register.html')
 
-
 # ============ Format Rupiah Helper ============
 
 def format_rupiah(value):
     return "Rp.{:,.2f}".format(value).replace(",", "#").replace(".", ",").replace("#", ".")
 
 app.jinja_env.filters['format_rupiah'] = format_rupiah
-
 
 # ============ Halaman Film Individu ============
 
@@ -173,7 +172,6 @@ def dracula():
 def dreams():
     return render_template('dreams_film.html')
 
-
 # ============ Booking Film ============
 
 @app.route('/confirm')
@@ -188,16 +186,15 @@ def submit_booking():
     harga = int(request.form.get('harga'))
     total = harga * jumlah
 
-    # Simpan ke database
     sql = "INSERT INTO bookings (nama_film, jam_tayang, jumlah_kursi, total_harga) VALUES (%s, %s, %s, %s)"
     val = (film, jadwal, jumlah, total)
-    
+
     cursor = mysql.connection.cursor()
     cursor.execute(sql, val)
     mysql.connection.commit()
     cursor.close()
 
-    beli_lagi_url = f"/{film.lower()}"  # misalnya /dracula
+    beli_lagi_url = f"/{film.lower()}"
     return render_template(
         'success.html',
         film=film,
@@ -207,6 +204,34 @@ def submit_booking():
         total=total,
         beli_lagi_url=beli_lagi_url
     )
+
+# ============ PDF Generator ============
+
+@app.route('/download_pdf')
+def download_pdf():
+    film = request.args.get('film')
+    jadwal = request.args.get('jadwal')
+    jumlah = request.args.get('jumlah')
+    harga = int(request.args.get('harga'))
+    total = int(request.args.get('total'))
+
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer)
+    p.drawString(100, 800, f"Booking Berhasil ✅")
+    p.drawString(100, 770, f"Film: {film}")
+    p.drawString(100, 750, f"Jam Tayang: {jadwal}")
+    p.drawString(100, 730, f"Jumlah Kursi: {jumlah}")
+    p.drawString(100, 710, f"Harga per Kursi: Rp {harga:,}")
+    p.drawString(100, 690, f"Total Harga: Rp {total:,}")
+    p.drawString(100, 660, "Terima kasih atas pemesanan Anda!")
+    p.showPage()
+    p.save()
+
+    buffer.seek(0)
+    response = make_response(buffer.read())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename=bukti_booking.pdf'
+    return response
 
 # ============ Run Aplikasi ============
 

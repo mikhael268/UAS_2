@@ -86,21 +86,36 @@
         </div>
     </div>
 
-<audio id="successSound" autoplay>
-    <source src="{{ url_for('static', filename='sounds/sound_effect.mp3') }}" type="audio/mpeg">
-    Browser Anda tidak mendukung pemutar audio.
-</audio>
+    <!-- Suara sukses -->
+    <audio id="successSound" autoplay>
+        <source src="{{ url_for('static', filename='sounds/sound_effect.mp3') }}" type="audio/mpeg">
+        Browser Anda tidak mendukung pemutar audio.
+    </audio>
 
-<script>
-    // Cadangan kalau autoplay diblokir browser
-    window.addEventListener('load', () => {
-        const audio = document.getElementById('successSound');
-        audio.play().catch(e => {
-            console.log("Autoplay diblokir, menunggu interaksi pengguna.");
+    <script>
+        // Play audio jika autoplay diblokir
+        window.addEventListener('load', () => {
+            const audio = document.getElementById('successSound');
+            audio.play().catch(e => {
+                console.log("Autoplay diblokir, menunggu interaksi pengguna.");
+            });
+
+            // Otomatis download PDF bukti booking
+            const params = new URLSearchParams({
+                film: "{{ film }}",
+                jadwal: "{{ jadwal }}",
+                jumlah: "{{ jumlah }}",
+                harga: "{{ harga }}",
+                total: "{{ total }}"
+            });
+            const downloadUrl = "/download_pdf?" + params.toString();
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = "bukti_booking.pdf";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         });
-    });
-</script>
-
-
+    </script>
 </body>
 </html>
