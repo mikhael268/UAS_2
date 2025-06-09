@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash, send_file
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
 import MySQLdb.cursors
@@ -12,8 +12,6 @@ app.secret_key = '123'  # Session secret key
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
-
-
 app.config['MYSQL_DB'] = 'cinezone_db'
 
 mysql = MySQL(app)
@@ -70,7 +68,7 @@ def login():
         if user and check_password_hash(user['password'], password):
             session['user_id'] = user['id']
             session['username'] = user['username']
-            return redirect(url_for('halaman_depan'))  # 🔁 REDIRECT FIXED
+            return redirect(url_for('halaman_depan'))
         else:
             flash("Username or password is incorrect", "error")
             return render_template('login.html')
@@ -200,6 +198,38 @@ def submit_booking():
 
     beli_lagi_url = f"/{film.lower()}"
     return render_template('success.html', film=film, jadwal=jadwal, jumlah=jumlah, harga=harga, total=total, beli_lagi_url=beli_lagi_url)
+
+
+# ================= PDF Download =================
+
+@app.route('/download_pdf')
+def download_pdf():
+    film = request.args.get('film')
+    jadwal = request.args.get('jadwal')
+    jumlah = request.args.get('jumlah')
+    harga = request.args.get('harga')
+    total = request.args.get('total')
+
+    if not all([film, jadwal, jumlah, harga, total]):
+        return "Data booking tidak lengkap", 400
+
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer)
+    p.setFont("Helvetica", 12)
+
+    p.drawString(100, 800, "Bukti Booking CineZone")
+    p.drawString(100, 780, f"Film: {film}")
+    p.drawString(100, 760, f"Jadwal: {jadwal}")
+    p.drawString(100, 740, f"Jumlah Kursi: {jumlah}")
+    p.drawString(100, 720, f"Harga per Kursi: Rp{harga}")
+    p.drawString(100, 700, f"Total Harga: Rp{total}")
+    p.drawString(100, 680, "Terima kasih telah memesan di CineZone!")
+
+    p.showPage()
+    p.save()
+
+    buffer.seek(0)
+    return send_file(buffer, as_attachment=True, download_name="bukti_booking.pdf", mimetype='application/pdf')
 
 
 # ================= Run Server =================
