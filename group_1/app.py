@@ -163,7 +163,7 @@ def seanman():
 
 @app.route('/chittato')
 def chittato():
-    return render_template('chitatto_film.html')
+    return render_template('chittato_film.html')
 
 @app.route('/dracula')
 def dracula():
