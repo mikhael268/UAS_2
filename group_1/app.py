@@ -13,7 +13,7 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 
 
-app.config['MYSQL_DB'] = 'cinezone'
+app.config['MYSQL_DB'] = 'cinezone_db'
 
 mysql = MySQL(app)
 
