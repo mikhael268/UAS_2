@@ -85,5 +85,22 @@
             </div>
         </div>
     </div>
+
+<audio id="successSound" autoplay>
+    <source src="{{ url_for('static', filename='sounds/sound_effect.mp3') }}" type="audio/mpeg">
+    Browser Anda tidak mendukung pemutar audio.
+</audio>
+
+<script>
+    // Cadangan kalau autoplay diblokir browser
+    window.addEventListener('load', () => {
+        const audio = document.getElementById('successSound');
+        audio.play().catch(e => {
+            console.log("Autoplay diblokir, menunggu interaksi pengguna.");
+        });
+    });
+</script>
+
+
 </body>
 </html>
