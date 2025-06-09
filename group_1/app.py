@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, s
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
 import MySQLdb.cursors
+from io import BytesIO
+from reportlab.pdfgen import canvas
 
 app = Flask(__name__)
 app.secret_key = '123'  # Session secret key
@@ -13,7 +15,6 @@ app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'cinezone'
 
 mysql = MySQL(app)
-
 pending_resets = {}
 
 # ================= ROUTES =================
