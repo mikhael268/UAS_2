@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Seanman - Booking Kursi</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+  <img src="{{ url_for('static', filename='image/Cine_Zone.png') }}" width="180" style="position: absolute; top: 5px; left: 5px;">
+  <div class="center-wrapper">
+    <div class="container">
+      <h1 id="judulFilm">SEANMAN</h1>
+    <div style="text-align: center; margin-top: 10px;">
+        <img src="{{ url_for('static', filename='image/seanman.png') }}" alt="Dracula Poster" style="max-width: 200px; height: auto; border-radius: 8px;">
+    </div>
+
+      <p class="price">Harga: Rp50.000,00</p>
+
+      <div class="schedule">
+        <label>Pilih Jadwal:</label>
+        <select id="jadwal">
+          <option value="10:00">10:00</option>
+          <option value="13:00">13:00</option>
+          <option value="16:00">16:00</option>
+        </select>
+      </div>
+
+      <div class="input-section">
+        <label for="jumlah">Jumlah Kursi:</label>
+        <input type="number" id="jumlah" min="1" placeholder="Masukkan jumlah kursi" />
+      </div>
+
+      <button id="beliBtn">BELI</button>
+    </div>
+  </div>
+  <script src="/static/js/script.js"></script>
+</body>
+</html>

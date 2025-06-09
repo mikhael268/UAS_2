@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Berhasil</title>
+    <style>
+        body {
+            background-color: #660000;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .popup {
+            background-color: #fff;
+            padding: 30px 40px;
+            border-radius: 15px;
+            text-align: left;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            width: 400px;
+        }
+
+        .popup h2 {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .popup p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .popup p strong {
+            font-weight: bold;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .button-group a {
+            flex: 1;
+            margin: 0 5px;
+        }
+
+        .button-group button {
+            width: 100%;
+            padding: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #aaa;
+            background-color: #eee;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .button-group button:hover {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="popup">
+            <h2>Booking Berhasil ✅</h2>
+            <p><strong>Film:</strong> {{ film }}</p>
+            <p><strong>Jam Tayang:</strong> {{ jadwal }}</p>
+            <p><strong>Jumlah Kursi:</strong> {{ jumlah }}</p>
+            <p><strong>Harga per Kursi:</strong> {{ (total // jumlah) | format_rupiah }}</p>
+            <p><strong>Total Harga:</strong> {{ total | format_rupiah }}</p>
+            <p><strong>Terima kasih atas pemesanan Anda!</strong></p>
+
+            <div class="button-group">
+                <a href="{{ beli_lagi_url }}"><button>Beli Lagi</button></a>
+                <a href="/"><button>Home</button></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

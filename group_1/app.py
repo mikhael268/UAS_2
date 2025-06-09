@@ -6,23 +6,21 @@ import MySQLdb.cursors
 app = Flask(__name__)
 app.secret_key = '123'
 
+# Konfigurasi koneksi MySQL
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'cinezone'
-
+app.config['MYSQL_DB'] = 'cinezone_db'
 
 mysql = MySQL(app)
 
-
 pending_resets = {}
 
+# ================== ROUTES ==================
 
 @app.route('/')
 def halaman_depan():
     return render_template('halaman_depan.html')
-
-
 
 @app.route('/index')
 def index():
@@ -46,15 +44,16 @@ def register_user():
 
     try:
         cursor = mysql.connection.cursor()
-        cursor.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)", 
-                       (username, email, hashed_password))
+        cursor.execute(
+            "INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
+            (username, email, hashed_password)
+        )
         mysql.connection.commit()
         cursor.close()
         return jsonify({"message": "User registered successfully!"})
     except Exception as e:
         print("Insert error:", e)
         return jsonify({"message": "Failed to register user."}), 500
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -63,8 +62,10 @@ def login():
         password = request.form['password']
 
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute("SELECT * FROM users WHERE username = %s OR email = %s", 
-                       (identifier, identifier))
+        cursor.execute(
+            "SELECT * FROM users WHERE username = %s OR email = %s",
+            (identifier, identifier)
+        )
         user = cursor.fetchone()
         cursor.close()
 
@@ -83,19 +84,15 @@ def logout():
     session.clear()
     return redirect(url_for('halaman_depan'))
 
-
-
 @app.route('/film/<judul>')
 def halaman_film(judul):
     if 'user_id' not in session:
         return redirect(url_for('index', next=url_for('halaman_film', judul=judul)))
     return render_template(f"{judul}.html")
 
-
 @app.route('/forget_password')
 def forget_password():
     return render_template('forgot_password.html')
-
 
 @app.route('/store_reset_otp', methods=['POST'])
 def store_reset_otp():
@@ -107,7 +104,6 @@ def store_reset_otp():
         return jsonify({"message": "OTP stored."})
     return jsonify({"message": "Invalid request"}), 400
 
-
 @app.route('/verify_reset_otp', methods=['POST'])
 def verify_reset_otp():
     data = request.get_json()
@@ -117,7 +113,6 @@ def verify_reset_otp():
     if email in pending_resets and pending_resets[email] == otp:
         return jsonify({"valid": True})
     return jsonify({"valid": False})
-
 
 @app.route('/reset_password_final', methods=['POST'])
 def reset_password_final():
@@ -131,8 +126,10 @@ def reset_password_final():
     try:
         hashed_password = generate_password_hash(new_password)
         cursor = mysql.connection.cursor()
-        cursor.execute("UPDATE users SET password = %s WHERE email = %s", 
-                       (hashed_password, email))
+        cursor.execute(
+            "UPDATE users SET password = %s WHERE email = %s",
+            (hashed_password, email)
+        )
         mysql.connection.commit()
         cursor.close()
         pending_resets.pop(email, None)
@@ -143,13 +140,75 @@ def reset_password_final():
 
 @app.route('/reset_form')
 def reset_form():
-    return render_template('reset_form.html')  
+    return render_template('reset_form.html')
 
 @app.route('/register', methods=['GET'])
 def register():
     return render_template('register.html')
 
 
+# ============ Format Rupiah Helper ============
+
+def format_rupiah(value):
+    return "Rp.{:,.2f}".format(value).replace(",", "#").replace(".", ",").replace("#", ".")
+
+app.jinja_env.filters['format_rupiah'] = format_rupiah
+
+
+# ============ Halaman Film Individu ============
+
+@app.route('/seanman')
+def seanman():
+    return render_template('seanman_film.html')
+
+@app.route('/chittato')
+def chittato():
+    return render_template('chittato_film.html')
+
+@app.route('/dracula')
+def dracula():
+    return render_template('dracula_film.html')
+
+@app.route('/dreams')
+def dreams():
+    return render_template('dreams_film.html')
+
+
+# ============ Booking Film ============
+
+@app.route('/confirm')
+def confirm():
+    return render_template('confirm.html')
+
+@app.route('/submit_booking', methods=['POST'])
+def submit_booking():
+    film = request.form.get('film')
+    jadwal = request.form.get('jadwal')
+    jumlah = int(request.form.get('jumlah'))
+    harga = int(request.form.get('harga'))
+    total = harga * jumlah
+
+    # Simpan ke database
+    sql = "INSERT INTO bookings (nama_film, jam_tayang, jumlah_kursi, total_harga) VALUES (%s, %s, %s, %s)"
+    val = (film, jadwal, jumlah, total)
+    
+    cursor = mysql.connection.cursor()
+    cursor.execute(sql, val)
+    mysql.connection.commit()
+    cursor.close()
+
+    beli_lagi_url = f"/{film.lower()}"  # misalnya /dracula
+    return render_template(
+        'success.html',
+        film=film,
+        jadwal=jadwal,
+        jumlah=jumlah,
+        harga=harga,
+        total=total,
+        beli_lagi_url=beli_lagi_url
+    )
+
+# ============ Run Aplikasi ============
 
 if __name__ == '__main__':
     app.run(debug=True)
