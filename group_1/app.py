@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask import flash
 import MySQLdb.cursors
 
 app = Flask(__name__)
@@ -10,7 +11,9 @@ app.secret_key = '123'
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'cinezone_db'
+
+
+app.config['MYSQL_DB'] = 'cinezone'
 
 mysql = MySQL(app)
 
@@ -26,9 +29,7 @@ def halaman_depan():
 def index():
     return render_template('index.html')
 
-@app.route('/signup')
-def signup():
-    return render_template('signUp.html', next=request.args.get('next'))
+
 
 @app.route('/register_user', methods=['POST'])
 def register_user():
@@ -62,27 +63,24 @@ def login():
         password = request.form['password']
 
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute(
-            "SELECT * FROM users WHERE username = %s OR email = %s",
-            (identifier, identifier)
-        )
+        cursor.execute("SELECT * FROM users WHERE username=%s OR email=%s", (identifier, identifier))
         user = cursor.fetchone()
         cursor.close()
 
         if user and check_password_hash(user['password'], password):
             session['user_id'] = user['id']
-            session['username'] = user['username']
-            next_page = request.form.get('next')
-            return redirect(next_page or url_for('halaman_depan'))
+            return redirect(url_for('index'))
         else:
-            return "Login failed. Please check your credentials.", 401
+            flash("Username or password is incorrect", "error")
+            return render_template('login.html', next=request.form.get('next'))
     else:
-        return render_template('login.html', next=request.args.get('next', '/'))
+        return render_template('login.html', next=request.args.get('next'))
 
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('halaman_depan'))
+    return redirect(url_for('login'))  
+
 
 @app.route('/film/<judul>')
 def halaman_film(judul):
